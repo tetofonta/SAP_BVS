@@ -4,5 +4,8 @@
 				<content>
 					<core:Fragment fragmentName="BVS.fragments.Campo" type="XML"></core:Fragment>
 				</content>
+				<footer>
+					<core:Fragment fragmentName="BVS.fragments.CampoFooter" type="XML"></core:Fragment>
+				</footer>
 			</Page>
 </mvc:View>

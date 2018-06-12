@@ -45,6 +45,7 @@ var dialogo;
 var lay = [];
 var riepilogoPage;
 var aboutPage;
+var isTheMatchStarted = false;
 
 function abilitaChiNonBatte() {
 	for (var k = 1; k <= 6; k++) {
@@ -308,6 +309,9 @@ function disabilitaChiNonBatte() {
 	}
 }
 
+var oModel;
+var isbatting;
+
 sap.ui.define([
 	"jquery.sap.global",
 	"sap/m/Button",
@@ -330,6 +334,12 @@ sap.ui.define([
 		 * @memberOf BVS.view.Game
 		 */
 			onInit: function() {
+				
+				oModel = new JSONModel({
+					changable: []
+				}, true);
+				this.getView().setModel(oModel);
+				
 				buttonn = Button;
 				dialogg = Dialog;
 	
@@ -411,28 +421,23 @@ sap.ui.define([
 						var i = find(a.target.innerHTML);
 						cambiando = bottoni[i].ref;
 	
-						if (cambiando === foo.getView().byId("g6")) battuta.setVisible(true);
-						else battuta.setVisible(false);
+						if (cambiando === foo.getView().byId("g6")) isbatting = true;
+						else isbatting = false;
 	
 						cambiando_idx = i;
 						if (!mistannospostando) {
-							if (!foo.pressDialog) {
-								foo.pressDialog = new Dialog({
-									title: "Possibili cambi",
-									content: panchina_selector,
-									beginButton: new Button({
-										text: "Close",
-										press: function() {
-											foo.pressDialog.close();
-										}.bind(foo)
-									})
-								});
-								dialogo = foo.pressDialog;
-								//to get access to the global model
-								foo.getView().addDependent(this.pressDialog);
+							if (!mthis._oPopover) {
+								mthis._oPopover = sap.ui.xmlfragment("BVS.fragments.CambioPopover", mthis);
+								mthis.getView().addDependent(mthis._oPopover);
+								mthis._oPopover.bindElement("/changable");
 							}
-							foo.pressDialog.open();
-						}
+							mthis._oPopover.openBy(this);
+							if(isbatting){
+								foo.getView().byId("cosse").setVisible("true");
+							} else {
+								foo.getView().byId("cosse").setVisible("false");
+							}
+						}		
 					});
 					$("#" + btn).draggable({
 						cancel: true,
@@ -592,13 +597,117 @@ sap.ui.define([
 			},
 			
 			_onRouteMatched : function (oEvent) {
-				var oArgs, oView, oQuery;
+				var oArgs, oQuery;
 				oArgs = oEvent.getParameter("arguments");
 				oQuery = oArgs["?query"];
-				if (oQuery)
-					console.log(oQuery);
-	
+				if (oQuery){
+					oModel.setProperty("/changable", JSON.parse(oQuery.giocatori));
+				}
 			},
+			
+			changePlayer: function(oEvent){
+				var changable = oModel.getProperty("/changable");
+				var id = oEvent.getSource().sId;
+				var selected = id.substr(id.lastIndexOf("-") + 1, id.lenght);
+				var onum = cambiando.getText();
+				var onam = cambiando.nome ? cambiando.nome : "come cazzo lo posso sapere?";
+				
+				cambiando.setText(changable[selected].numero);
+				cambiando.nome = changable[selected].nome;
+				bottoni[cambiando_idx].numero = changable[selected].numero;
+				if(isTheMatchStarted){
+					changable[selected] = {
+						nome: onam,
+						numero: onum
+					}
+					oModel.setProperty("/changable", changable);
+				} else {
+					changable.splice(selected, 1);
+					oModel.setProperty("/changable", changable)
+				}
+				
+				mthis._oPopover.close()
+			},
+			
+			addPuntoMio: function() {
+				addPuntoSound.play();
+				mioPunteggio++;
+				if (!chiHaSegnato) {
+					gira();
+				}
+				chiHaSegnato = true;
+				//True: abbiamo segnato noi
+				this.getView().byId("mieipunti").setText(mioPunteggio);
+				pushPunto(mioPunteggio, suoPunteggio);
+				disabilitaChiNonBatte();
+				if (mioPunteggio >= topSet && mioPunteggio - suoPunteggio >= 2) {
+					pushSet();
+					fineSetSound.play();
+					mioPunteggio = 0;
+					suoPunteggio = 0;
+					this.getView().byId("mieipunti").setText(mioPunteggio);
+					this.getView().byId("tuoipunti").setText(suoPunteggio);
+					mieiSet++;
+					var sets = "";
+					var rest = "";
+					for (var i = 0; i < mieiSet; i++)
+						sets += "\u2588 ";
+					for (var i = betterThan; i > mieiSet; i--)
+						rest += "\u2588 ";
+					this.getView().byId("mieisetvinti").setText(sets);
+					this.getView().byId("mieisetmancanti").setText(rest);
+					if (mieiSet > betterThan / 2) {
+						finePartita();
+					}
+				}
+			},
+			subPuntoMio: function() {
+				if (mioPunteggio > 0) {
+					var currentPuntoTemp = currentSet.punti[currentSet.punti.length - 1];
+					currentPunto.azione = currentPuntoTemp.azione;
+					currentSet.punti.splice(currentSet.punti.length - 1, 1);
+					mioPunteggio--;
+					this.getView().byId("mieipunti").setText(mioPunteggio);
+				}
+			},
+			addPuntoSuo: function() {
+				abilitaChiNonBatte();
+				addPuntoSound.play();
+				suoPunteggio++;
+				chiHaSegnato = false;
+				//False: hanno segnato loro
+				this.getView().byId("tuoipunti").setText(suoPunteggio);
+				pushPunto(mioPunteggio, suoPunteggio);
+				if (suoPunteggio >= topSet && suoPunteggio - mioPunteggio >= 2) {
+					pushSet();
+					fineSetSound.play();
+					mioPunteggio = 0;
+					suoPunteggio = 0;
+					this.getView().byId("mieipunti").setText(mioPunteggio);
+					this.getView().byId("tuoipunti").setText(suoPunteggio);
+					suoiset++;
+					var sets = "";
+					var rest = "";
+					for (var i = 0; i < suoiset; i++)
+						sets += "\u2588 ";
+					for (var i = betterThan; i > suoiset; i--)
+						rest += "\u2588 ";
+					this.getView().byId("suoisetvinti").setText(sets);
+					this.getView().byId("suoisetmancanti").setText(rest);
+					if (suoiset > betterThan / 2) {
+						finePartita();
+					}
+				}
+			},
+			subPuntoSuo: function() {
+				if (suoPunteggio > 0) {
+					var currentPuntoTemp = currentSet.punti[currentSet.punti.length - 1];
+					currentPunto.azione = currentPuntoTemp.azione;
+					currentSet.punti.splice(currentSet.punti.length - 1, 1);
+					suoPunteggio--;
+					this.getView().byId("tuoipunti").setText(suoPunteggio);
+				}
+			}
 
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
