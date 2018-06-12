@@ -1,54 +1,53 @@
+
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.Home"
-	xmlns:html="http://www.w3.org/1999/xhtml">
-			<Page title="{i18n>homeTitle}">
-				<content>
-					<VBox justifyContent="Center">
-						<HBox justifyContent="End">
-						<ComboBox change="loadTeam"
-							items="{
+          xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page title="{i18n>homeTitle}">
+        <content>
+            <VBox justifyContent="Center">
+                <HBox justifyContent="End">
+                    <ComboBox change="loadTeam"
+                              items="{
 								path: '/squadre'			
 							}">
-							<core:Item key="{squadra}" text="{squadra}" />
-						</ComboBox>
-						</HBox>
-						<HBox justifyContent="Center">
-							<VBox width="100%" class="darkbgmenodark">
-								<Title text="Giocatori"/>
-								<List
-									mode="Delete"
-									delete="deletePlayer"
-									items="{
+                        <core:Item key="{squadra}" text="{squadra}"/>
+                    </ComboBox>
+                </HBox>
+                <HBox justifyContent="Center">
+                    <VBox width="100%" class="darkbgmenodark">
+                        <Title text="Giocatori"/>
+                        <List
+                                mode="Delete"
+                                delete="deletePlayer"
+                                items="{
 										path: '/players'
 									}">
-									<StandardListItem
-										type="Active"
-										press="playerSelect"
-										title="{nome}"
-										description="{numero}"
-										icon="{foto}"/>
-								</List>
-							</VBox>
-							<VBox width="100%"  class="darkbg">
-								<Title text="Partite Giocate"/>
-								<List
-									mode="Delete"
-									delete="deleteMatch"
-									items="{
+                            <StandardListItem
+                                    title="{nome}"
+                                    description="{numero}"
+                                    icon="{foto}"/>
+                        </List>
+                    </VBox>
+                    <VBox width="100%" class="darkbg">
+                        <Title text="Partite Giocate"/>
+                        <List
+                                mode="Delete"
+                                delete="deleteMatch"
+                                items="{
 										path: '/saved'
 									}">
-									<StandardListItem
-										title="{squadra} - {avversario}"
-										description="{data}" />
-								</List>
-							</VBox>
-						</HBox>
-					</VBox>
-					
-					<OverflowToolbar>
-						<ToolbarSpacer/>
-						<Button id="newMatch" press="newMatch" type="Accept" class="showButtons" text="Nuova partita"/>
-						<Button id="deleteTeam" press="deleteTeam" type="Reject" class="showButtons" text="Elimina squadra"/>
-					</OverflowToolbar>
-				</content>
-			</Page>
+                            <StandardListItem
+                                    title="{squadra} - {avversario}"
+                                    description="{data}"/>
+                        </List>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <OverflowToolbar class="footer">
+                <ToolbarSpacer/>
+                <Button press="newMatch" type="Accept" text="Nuova partita"/>
+                <Button type="Reject" text="Elimina squadra"/>
+            </OverflowToolbar>
+        </content>
+    </Page>
 </mvc:View>
