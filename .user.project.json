@@ -16,7 +16,11 @@
         "runnerId": "webapprunner",
         "id": 9542360,
         "displayName": "Run index.html",
+<<<<<<< HEAD
         "lastRunTimeStamp": 1528793797861
+=======
+        "lastRunTimeStamp": 1528792851381
+>>>>>>> branch 'master' of https://github.com/tetofonta/SAP_BVS
       }
     },
     {

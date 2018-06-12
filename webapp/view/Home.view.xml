@@ -42,10 +42,10 @@
 						</HBox>
 					</VBox>
 					
-					<OverflowToolbar class="footer">
+					<OverflowToolbar>
 						<ToolbarSpacer/>
-						<Button press="newMatch" type="Accept" text="Nuova partita"/>
-						<Button type="Reject" text="Elimina squadra"/>
+						<Button id="newMatch" press="newMatch" type="Accept" class="showButtons" text="Nuova partita"/>
+						<Button id="deleteTeam" press="deleteTeam" type="Reject" class="showButtons" text="Elimina squadra"/>
 					</OverflowToolbar>
 				</content>
 			</Page>

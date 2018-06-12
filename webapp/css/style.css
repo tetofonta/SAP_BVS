@@ -1,3 +1,4 @@
+
 .tondo>.sapMBtnInner {
 	width: 81px;
 	height: 81px;
@@ -160,4 +161,7 @@
 .sapMPanelContent{
 	padding: 0rem;
 	border-bottom: 1px solid #eee;
+}
+.showButtons{
+	opacity: 0;
 }
