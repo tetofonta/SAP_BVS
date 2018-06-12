@@ -1,6 +1,6 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.Player"
-	xmlns:html="http://www.w3.org/1999/xhtml">
-			<Page title="{i18n>playerTitle}">
-				<content></content>
-			</Page>
+          xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page title="{i18n>playerTitle}">
+        <content></content>
+    </Page>
 </mvc:View>
