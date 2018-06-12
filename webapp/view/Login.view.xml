@@ -2,19 +2,21 @@
           xmlns:html="http://www.w3.org/1999/xhtml">
     <Page title="Better Volley Scouting">
         <content>
-            <VBox fitContainer="true" justifyContent="Center" alignItems="Center" alignContent="Center">
+            <VBox fitContainer="true" justifyContent="Start" alignItems="Center">
                 <items>
                     <Image src="./image/Logo.jpeg"/>
                     <Input id="user" placeholder="Username"></Input>
                     <Input id="password" placeholder="Password" type="Password"></Input>
-                    <Button width="12rem" text="Enter" type="Emphasized" press="doLogin"></Button>
+                    <Button width="192px" text="Enter" type="Emphasized" press="doLogin"></Button>
                 </items>
             </VBox>
-            <footer>
-                <HBox justifyContent="Center">
-                    <Button icon="sap-icon://hint" press="openAbout"/>
-                </HBox>
-            </footer>
         </content>
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer/>
+                <Button icon="sap-icon://hint" press="openAbout" width="192px"/>
+                <ToolbarSpacer/>
+            </OverflowToolbar>
+        </footer>
     </Page>
 </mvc:View>

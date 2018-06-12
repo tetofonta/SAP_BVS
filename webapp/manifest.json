@@ -78,8 +78,8 @@
       },
       "routes": [
         {
-          "pattern": "",
-          "name": "appLogin",
+          "pattern": "Login",
+          "name": "Login",
           "target": "Login"
         },
         {
