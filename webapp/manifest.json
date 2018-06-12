@@ -96,6 +96,11 @@
           "name": "Player",
           "pattern": "Player/{playerID}",
           "target": "Player"
+        },
+        {
+          "name": "About",
+          "pattern": "About",
+          "target": "About"
         }
       ],
       "targets": {
@@ -122,6 +127,11 @@
         "Player": {
           "viewId": "player",
           "viewName": "Player",
+          "transition": "slide"
+        },
+        "About": {
+          "viewId": "about",
+          "viewName": "About",
           "transition": "slide"
         }
       }

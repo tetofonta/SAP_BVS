@@ -1,0 +1,26 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.About"
+          xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page title="About Better Volley Scouting">
+        <content>
+            <VBox fitContainer="true" justifyContent="Center" alignItems="Center" alignContent="Center">
+                <items>
+                    <Image src="./image/Logo.jpeg" alt="Thats a duck with a ball."/>
+                    <h2>
+                        <strong>Better Volley Scouting</strong>
+                    </h2>
+                    <p>App creata da:</p>
+                    <ul>
+                        <li>Francesco Torli</li>
+                        <li>Lorenzo Moreschi</li>
+                        <li>Simone Gaffurini</li>
+                        <li>Stefano Fontana</li>
+                    </ul>
+                    <p>Studenti dell'ITIS Castelli di Brescia.</p>
+                    <p>Stage 2017/2018.</p>
+                    <p>Documentazione:&nbsp;<a title='Documentazione' href='https://goo.gl/JhMymi' target='_blank'
+                                               rel='noopener'/>
+                </items>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>
