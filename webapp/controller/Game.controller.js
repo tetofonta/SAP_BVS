@@ -363,6 +363,8 @@ sap.ui.define([
 				}));
 				panchina_selector.addItem(cambi);
 				panchina_selector.addItem(battuta);
+				
+				sap.ui.core.UIComponent.getRouterFor(this).getRoute("Game").attachMatched(this._onRouteMatched, this);
 			},
 
 		/**
@@ -587,7 +589,16 @@ sap.ui.define([
 						pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 3);
 					}
 				});
-			}
+			},
+			
+			_onRouteMatched : function (oEvent) {
+				var oArgs, oView, oQuery;
+				oArgs = oEvent.getParameter("arguments");
+				oQuery = oArgs["?query"];
+				if (oQuery)
+					console.log(oQuery);
+	
+			},
 
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.

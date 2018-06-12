@@ -91,7 +91,7 @@
 		},
 		{
 		    "name": "Game",
-		    "pattern": "Game",
+		    "pattern": "Game/:?query:",
 		    "target": "Game"
 		},
 		{

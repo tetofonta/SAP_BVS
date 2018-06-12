@@ -1,16 +1,16 @@
 function httpGet(theUrl) {
-    let xmlHttp = new XMLHttpRequest();
+    var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", theUrl, false); // false for synchronous request
     xmlHttp.send(null);
     return xmlHttp.responseText;
 }
 
-let getTeams = "getTeams";
-let getSavedMatches = "getSavedMatches";
-let getPlayers = "getPlayers";
+var getTeams = "getTeams";
+var getSavedMatches = "getSavedMatches";
+var getPlayers = "getPlayers";
 
 
-let apiHost = "https://cors.io/?http://bettervolleyscouting.altervista.org";
+var apiHost = "https://cors.io/?http://bettervolleyscouting.altervista.org";
 
 function getFromApi(res, prams) {
     if (!res.startsWith("/")) res = "/" + res;
@@ -26,7 +26,10 @@ function getFromApi(res, prams) {
     return JSON.parse(httpGet((apiHost + res).replace(" ", "%20")));
 }
 
-let oModel = {};
+var oModel = {};
+var curTeam = "";
+var curPlayers = [];
+
 
 sap.ui.define([
 	"jquery.sap.global",
@@ -36,12 +39,14 @@ sap.ui.define([
     "use strict";
 
     return Controller.extend("BVS.controller.Home", {
-
         onInit: function () {
+			var squadre = getFromApi(getTeams);
+			squadre.push({squadra: "+++ Aggiungi squadra +++"});
             oModel = new JSONModel({
                 saved: [],
                 players: [],
-                squadre: [...getFromApi(getTeams), {squadra: "+++ Aggiungi squadra +++"}]
+                playersExport: [],
+                squadre: squadre
             }, true);
             this.getView().setModel(oModel);
         },
@@ -50,22 +55,34 @@ sap.ui.define([
             if (oEvent.getSource()._lastValue !== "+++ Aggiungi squadra +++") {
                 oModel.setProperty("/saved", getFromApi(getSavedMatches, {SQUADRA: oEvent.getSource()._lastValue}));
                 oModel.setProperty("/players", getFromApi(getPlayers, {SQUADRA: oEvent.getSource()._lastValue}));
+                oModel.getProperty("/players").forEach(function(e){
+                	curPlayers.push({
+                		nome: e.nome,
+                		numero: e.numero
+                	})
+                })
                 $('.showButtons').css('opacity', '1.0', 'important');
+                curTeam = oEvent.getSource()._lastValue;
             } else {
                 //TODO: aggiungi squadra
             }
         },
 
-        deleteMatch: function () {
+        devareMatch: function () {
             //TODO
         },
 
-        deletePlayer: function () {
+        devarePlayer: function () {
             //TODO
         },
 
         newMatch: function () {
-            sap.ui.core.UIComponent.getRouterFor(this).navTo("Game");
+            sap.ui.core.UIComponent.getRouterFor(this).navTo("Game", {
+				query: {
+					squadra : curTeam,
+					giocatori: JSON.stringify(curPlayers)
+				}
+			});
         }
     });
 

@@ -2,14 +2,14 @@
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core">
 	<VBox  class="campodagioco" width="100%" direction="Column" id="__vbox000" justifyContent="Center" alignItems="Center" alignContent="Center" backgroundDesign="Translucent" fitContainer="true">
-		<VBox width="100%" direction="Column" id="__vbox0040" justifyContent="Center" alignItems="Center" alignContent="Center" backgroundDesign="Translucent" fitContainer="true">
+		<VBox class="campodagioco" width="100%" direction="Column" id="__vbox0040" justifyContent="Center" alignItems="Center" alignContent="Center" backgroundDesign="Translucent" fitContainer="true">
 			<Button width="320px" id="top3" class="pee punteggio3 wow"/>
 			<Button width="320px" id="top2" class="pee punteggio3 mah"/>
 			<Button width="320px" id="top1" class="pee punteggio3 schifo"/>
 		</VBox>
 		<HBox  class="campodagioco" width="100%" id="__hbox200" alignItems="Center" justifyContent="Center">
-			<VBox width="100%" direction="Column" id="__vbox00" justifyContent="Center" alignItems="Center" alignContent="Center" backgroundDesign="Translucent" fitContainer="true">
-				<HBox width="100%" id="__hbox2000" alignItems="Center" justifyContent="Center">
+			<VBox class="campodagioco" width="100%" direction="Column" id="__vbox00" justifyContent="Center" alignItems="Center" alignContent="Center" backgroundDesign="Translucent" fitContainer="true">
+				<HBox class="campodagioco" width="100%" id="__hbox2000" alignItems="Center" justifyContent="Center">
 					<Button width="140px" id="left3" class="poop punteggio1 wow verticaleee"/>
 					<Button width="200px" id="left2" class="poop punteggio1 mah verticaleee"/>
 					<Button width="140px" id="left1" class="poop punteggio1 schifo verticaleee"/>
@@ -23,23 +23,23 @@
 							<Button width="160px" class="campo" id="schiacciataBtn" icon="icone/4.png"/>
 						</items>
 					</HBox>
-					<HBox class="scalagraduata" width="100%" id="__hbox4" justifyContent="Center" alignContent="Center" alignItems="Center">
+					<HBox class="scalagraduata campodagioco" width="100%" id="__hbox4" justifyContent="Center" alignContent="Center" alignItems="Center">
 						<items>
 							<Button width="100px" id="palleggioBtn" class="poop campo campoV" icon="icone/3.png" press="show"/>
-							<VBox direction="Column" id="__vbox1" class="pazio">
+							<VBox direction="Column" id="__vbox1" class="pazio campodagioco">
 								<items>
-									<HBox class="qwerty" id="__hbox1" alignContent="Center" alignItems="Center" justifyContent="Center">
+									<HBox class="qwerty campodagioco" id="__hbox1" alignContent="Center" alignItems="Center" justifyContent="Center">
 										<items>
-											<Button text="00" width="100px" id="g3" class="tondo"/>
-											<Button text="00" width="100px" id="g2" class="tondo"/>
-											<Button text="00" width="100px" id="g1" class="tondo"/>
+											<Button text="P1" width="100px" id="g3" class="tondo"/>
+											<Button text="P2" width="100px" id="g2" class="tondo"/>
+											<Button text="P3" width="100px" id="g1" class="tondo"/>
 										</items>
 									</HBox>
-									<HBox xmlns="sap.m" class="qwerty" id="__hbox0" alignItems="Center" alignContent="Center" justifyContent="Center">
+									<HBox xmlns="sap.m" class="qwerty campodagioco" id="__hbox0" alignItems="Center" alignContent="Center" justifyContent="Center">
 										<items>
-											<Button text="00" width="100px" id="g4" class="tondo"/>
-											<Button text="00" width="100px" id="g5" class="tondo"/>
-											<Button text="00" width="100px" id="g6" class="tondo"/>
+											<Button text="P4" width="100px" id="g4" class="tondo"/>
+											<Button text="P5" width="100px" id="g5" class="tondo"/>
+											<Button text="P6" width="100px" id="g6" class="tondo"/>
 										</items>
 									</HBox>
 								</items>
@@ -50,20 +50,20 @@
 							<!--<Button class="poop punteggio1 wow" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" width="60px" id="__button0_copy3"/>-->
 						</items>
 					</HBox>
-					<HBox width="100%" id="__hbox3" alignItems="Center" alignContent="Center" justifyContent="Center">
+					<HBox class="campodagioco" width="100%" id="__hbox3" alignItems="Center" alignContent="Center" justifyContent="Center">
 						<items>
 							<Button width="160px" class="campo" icon="icone/1.png" id="tuffoBtn"/>
 							<Button width="160px" class="campo" id="bagherBtn" icon="icone/2.png"/>
 						</items>
 					</HBox>
-					<HBox width="100%" id="__hbox60" alignItems="Center" alignContent="Center" justifyContent="Center">
+					<HBox class="campodagioco" width="100%" id="__hbox60" alignItems="Center" alignContent="Center" justifyContent="Center">
 						<items>
 							<!--<Button width="320px" class="campo" id="battutaBtn" icon="../icone/6.png"/>-->
 						</items>
 					</HBox>
 				</items>
 			</VBox>
-			<VBox width="100%" direction="Column" id="_vefdvhb" justifyContent="Center" alignItems="Center" alignContent="Center" fitContainer="true">
+			<VBox class="campodagioco" width="100%" direction="Column" id="_vefdvhb" justifyContent="Center" alignItems="Center" alignContent="Center" fitContainer="true">
 				<HBox width="100%" id="__hbox200800" alignItems="Center" justifyContent="Center">
 					<Button width="140px" id="right1" class="poop punteggio2 schifo verticaleee"/>
 					<Button width="200px" id="right2" class="poop punteggio2 mah verticaleee"/>
@@ -71,7 +71,7 @@
 				</HBox>
 			</VBox>
 		</HBox>
-		<VBox width="100%" direction="Column" id="__vbox00840" justifyContent="Center" alignItems="Center" alignContent="Center" backgroundDesign="Translucent" fitContainer="true">
+		<VBox class="campodagioco" width="100%" direction="Column" id="__vbox00840" justifyContent="Center" alignItems="Center" alignContent="Center" backgroundDesign="Translucent" fitContainer="true">
 			<Button width="320px" id="bottom1" class="pee punteggio4 schifo"/>
 			<Button width="320px" id="bottom2" class="pee punteggio4 mah"/>
 			<Button width="320px" id="bottom3" class="pee punteggio4 wow"/>
