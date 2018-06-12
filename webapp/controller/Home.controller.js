@@ -30,7 +30,6 @@ var oModel = {};
 var curTeam = "";
 var curPlayers = [];
 
-
 sap.ui.define([
 	"jquery.sap.global",
     "sap/ui/core/mvc/Controller",
@@ -75,7 +74,14 @@ sap.ui.define([
         devarePlayer: function () {
             //TODO
         },
-
+		playerSelect: function(e){
+        	sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
+        		query:{
+        			numero: oModel.getProperty("/players")[e.getSource().sId.split('-')[2]].numero,
+        			squadra: curTeam
+        		}
+        	});
+		},
         newMatch: function () {
             sap.ui.core.UIComponent.getRouterFor(this).navTo("Game", {
 				query: {

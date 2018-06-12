@@ -14,7 +14,6 @@
 			"version": "1.40.12"
 		}
 	},
-
 	"sap.ui": {
 		"technology": "UI5",
 		"icons": {
@@ -30,13 +29,8 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": [
-			"sap_hcb",
-			"sap_belize"
-
-		]
+		"supportedThemes": ["sap_hcb", "sap_belize"]
 	},
-
 	"sap.ui5": {
 		"rootView": {
 			"viewName": "BVS.view.App",
@@ -67,65 +61,62 @@
 			}
 		},
 		"routing": {
-		 "config": {
-		    "routerClass": "sap.m.routing.Router",
-		    "viewType": "XML",
-		    "viewPath": "BVS.view",
-		    "controlId": "app",
-		    "controlAggregation": "pages",
-		    "transition": "slide",
-		    "async": true,
-		    "bypassed": {
-               "target": "notFound"
-            }
-		 },
-		"routes": [{
-			"pattern": "",
-			"name": "appLogin",
-			"target": "Login"
-		},
-		{
-			"name": "Home",
-			"pattern": "Home",
-			"target": "Home"
-		},
-		{
-		    "name": "Game",
-		    "pattern": "Game/:?query:",
-		    "target": "Game"
-		},
-		{
-		    "name": "Player",
-		    "pattern": "Player/{playerID}",
-		    "target": "Player"
-		}],
-		 "targets": {
-		    "Login": {
-		       "viewId": "login",
-		       "viewName": "Login",
-		       "viewLevel" : 1
-		    },
-            "notFound": {
-               "viewId": "notFound",
-               "viewName": "NotFound",
-               "transition": "show"
-            },
-            "Home": {
-               "viewId": "home",
-               "viewName": "Home",
-               "transition": "slide"
-            },
-            "Game": {
-               "viewId": "game",
-               "viewName": "Game",
-               "transition": "slide"
-            },
-            "Player": {
-               "viewId": "player",
-               "viewName": "Player",
-               "transition": "slide"
-            }
-		 }
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "BVS.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"transition": "slide",
+				"async": true,
+				"bypassed": {
+					"target": "notFound"
+				}
+			},
+			"routes": [{
+				"pattern": "",
+				"name": "appLogin",
+				"target": "Login"
+			}, {
+				"name": "Home",
+				"pattern": "Home",
+				"target": "Home"
+			}, {
+				"name": "Game",
+				"pattern": "Game/:?query:",
+				"target": "Game"
+			}, {
+				"name": "Player",
+				"pattern": "Player/:?query:",
+				"target": "Player"
+			}],
+			"targets": {
+				"Login": {
+					"viewId": "login",
+					"viewName": "Login",
+					"viewLevel": 1
+				},
+				"notFound": {
+					"viewId": "notFound",
+					"viewName": "NotFound",
+					"transition": "show"
+				},
+				"Home": {
+					"viewId": "home",
+					"viewName": "Home",
+					"transition": "slide"
+				},
+				"Game": {
+					"viewId": "game",
+					"viewName": "Game",
+					"transition": "slide"
+				},
+				"Player": {
+					"viewId": "player",
+					"viewName": "Player",
+					"transition": "slide"
+				}
+			}
 		},
 		"resources": {
 			"css": [{
