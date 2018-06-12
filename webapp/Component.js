@@ -1,21 +1,21 @@
 sap.ui.define([
-	"sap/ui/core/UIComponent",
-	"sap/ui/Device",
-	"BVS/model/models"
-], function(UIComponent, Device, models) {
-	"use strict";
+    "sap/ui/core/UIComponent",
+    "sap/ui/Device",
+    "BVS/model/models"
+], function (UIComponent, Device, models) {
+    "use strict";
 
-	return UIComponent.extend("BVS.Component", {
+    return UIComponent.extend("BVS.Component", {
 
-		metadata: {
-			manifest: "json"
-		},
+        metadata: {
+            manifest: "json"
+        },
 
-		/**
-		 * The component is initialized by UI5 automatically during the startup of the app and calls the init method once.
-		 * @public
-		 * @override
-		 */
+        /**
+         * The component is initialized by UI5 automatically during the startup of the app and calls the init method once.
+         * @public
+         * @override
+         */
 
         init: function () {
             // call the init function of the parent
@@ -24,5 +24,5 @@ sap.ui.define([
             // create the views based on the url/hash
             this.getRouter().initialize();
         }
-	});
+    });
 });

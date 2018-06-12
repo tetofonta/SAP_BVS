@@ -1,12 +1,22 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.Login"
-	xmlns:html="http://www.w3.org/1999/xhtml">
-		<Page title="{i18n>loginTitle}">
-			<content>
-				<HBox justifyContent="Center">
-					<VBox justifyContent="Center">
-						<Button press="doLogin" text="{i18n>loginBtn}"></Button>
-					</VBox>
-				</HBox>
-			</content>
-		</Page>
+          xmlns:html="http://www.w3.org/1999/xhtml">
+    <Page title="Better Volley Scouting">
+        <content>
+            <VBox fitContainer="true" justifyContent="Start" alignItems="Center">
+                <items>
+                    <Image src="./image/Logo.jpeg"/>
+                    <Input id="user" placeholder="Username"></Input>
+                    <Input id="password" placeholder="Password" type="Password"></Input>
+                    <Button width="192px" text="Enter" type="Emphasized" press="doLogin"></Button>
+                </items>
+            </VBox>
+        </content>
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer/>
+                <Button icon="sap-icon://hint" press="openAbout" width="192px"/>
+                <ToolbarSpacer/>
+            </OverflowToolbar>
+        </footer>
+    </Page>
 </mvc:View>
