@@ -10,6 +10,11 @@
                     <Button width="192px" text="Enter" type="Emphasized" press="doLogin"></Button>
                 </items>
             </VBox>
+            <footer>
+                <HBox justifyContent="Center">
+                    <Button icon="sap-icon://hint" press="openAbout"/>
+                </HBox>
+            </footer>
         </content>
         <footer>
             <OverflowToolbar>

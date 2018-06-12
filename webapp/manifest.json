@@ -78,7 +78,7 @@
       },
       "routes": [
         {
-          "pattern": "Login",
+          "pattern": "",
           "name": "Login",
           "target": "Login"
         },
@@ -132,7 +132,7 @@
         "About": {
           "viewId": "about",
           "viewName": "About",
-          "transition": "slide"
+          "transition": "flip"
         }
       }
     },
