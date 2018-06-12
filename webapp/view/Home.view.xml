@@ -1,3 +1,4 @@
+
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.Home"
           xmlns:html="http://www.w3.org/1999/xhtml">
     <Page title="{i18n>homeTitle}">

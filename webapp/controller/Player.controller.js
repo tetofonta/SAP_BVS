@@ -1,3 +1,33 @@
+function httpGet(theUrl) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", theUrl, false); // false for synchronous request
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+}
+
+var getTeams = "getTeams";
+var getSavedMatches = "getSavedMatches";
+var getPlayer = "getPlayer";
+
+var squadraPlayer = "";
+var numeroPlayer = "";
+
+var apiHost = "https://cors.io/?http://bettervolleyscouting.altervista.org";
+
+function getFromApi(res, prams) {
+    if (!res.startsWith("/")) res = "/" + res;
+    if (!res.endsWith(".php")) res = res + ".php";
+
+    if (prams !== undefined) {
+        res += "?";
+        Object.keys(prams).forEach(function (e) {
+            res += e + "=" + prams[e] + "&";
+        });
+        res += "foo=foo";
+    }
+    return JSON.parse(httpGet((apiHost + res).replace(" ", "%20")));
+}
+
 sap.ui.define([
     "sap/ui/core/mvc/Controller"
 ], function (Controller) {
@@ -10,9 +40,37 @@ sap.ui.define([
          * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
          * @memberOf BVS.view.Player
          */
-        //	onInit: function() {
-        //
-        //	},
+        onInit: function () {
+            sap.ui.core.UIComponent.getRouterFor(this).getRoute("Player").attachMatched(this._onRouteMatched, this);
+
+            //this.getView().byId('profilePic').setSrc(getFromApi(getPlayer, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer}));
+            //console.log(getFromApi(getPlayer, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer}));
+        },
+        _onRouteMatched: function (oEvent) {
+            var oArgs, oQuery;
+            oArgs = oEvent.getParameter("arguments");
+            oQuery = oArgs["?query"];
+            if (oQuery)
+                squadraPlayer = oQuery.squadra;
+            numeroPlayer = oQuery.numero;
+            //console.log(getFromApi(getPlayer, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer})[0]);
+            this.getView().byId('profilePic').setSrc(getFromApi(getPlayer, {
+                NUMERO: numeroPlayer,
+                SQUADRA: squadraPlayer
+            })[0].foto);
+            this.getView().byId('nomecognomeField').setValue(getFromApi(getPlayer, {
+                NUMERO: numeroPlayer,
+                SQUADRA: squadraPlayer
+            })[0].nome);
+            this.getView().byId('numeroField').setValue(getFromApi(getPlayer, {
+                NUMERO: numeroPlayer,
+                SQUADRA: squadraPlayer
+            })[0].numero);
+            this.getView().byId('datanascitaField').setValue(getFromApi(getPlayer, {
+                NUMERO: numeroPlayer,
+                SQUADRA: squadraPlayer
+            })[0].data_di_nascita);
+        }
 
         /**
          * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered

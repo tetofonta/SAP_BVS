@@ -1,3 +1,176 @@
+.tondo>.sapMBtnInner {
+	width: 81px;
+	height: 81px;
+	
+	border: 0;
+	border-radius: 50%;
+	
+	background-color: #D9853B;
+	font-size: 40px;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	z-index: 10;
+
+	padding-top: 20px;
+}
+.tondo:hover>.sapMBtnInner {
+	background-color: #D9954B;
+}
+.tondo>.sapMBtnActive{
+	background-color: #D9853B !important;
+}
+.tondo>.sapMBtn{
+	display: block !important;
+	padding-top: 20px !important;
+}
+
+.puntipiu>.sapMBtnInner {
+	background-color: green !important;
+	margin-left: 15px !important;
+	margin-right: 15px !important;
+}
+
+.puntimeno>.sapMBtnInner {
+	background-color: red !important;
+	margin-right: 15px !important;
+}
+
+.qwerty>.sapMFlexItem{
+	height: 101px;
+	border-top: 3px solid;
+}
+
+.bigtext{
+	font-stile: bold !important;
+	font-size: 38pt !important;
+}
+
+.nonandareacapo{
+	white-space: nowrap !important;
+}
+
+.sapMDialogScrollCont{
+	white-space: nowrap !important;
+}
+
+.campoV>.sapMBtnInner{
+	background-color: #85C0BE;
+    border-radius: 0;
+    border: 0;
+    padding-top: 100px;
+}
+
+.pazio>.sapMFlexItem{
+	margin:30px;
+	margin-bottom: 0;
+}
+
+.poop>.sapMBtnInner{
+	height: 230px;
+	margin-top: -85px;
+}
+
+.pee>.sapMBtnInner{
+	margin-top: 30px;
+	margin: 0;
+	height: 80px;
+}
+
+.campodagioco{
+	background-color: #558C89;
+}
+
+.campo>.sapMBtnInner{
+	background-color: #85C0BE;
+	border-radius: 0;
+	border: 0;
+}
+
+.schifo>.sapMBtnInner{
+	background-color: #DD5B40;
+	border:0;
+	border-radius: 0;
+}
+
+.mah>.sapMBtnInner{
+	background-color: #DBDB3F;
+	border:0;
+	border-radius: 0;
+}
+
+.wow>.sapMBtnInner{
+	background-color: #85DB3F;
+	border:0;
+	border-radius: 0;
+}
+
+.punteggio{
+	margin: 10px !important;	
+}
+
+.punteggio1{
+	display: none;
+	height: 80px;
+}
+
+.verticaleee{
+	margin-top: 32px;
+}
+
+.punteggio2{
+	display: none;
+	height: 80px;
+}
+.punteggio3{
+	display: none;
+	height: 80px;
+}
+.punteggio4{
+	display: none;
+	height: 80px;
+}
+/*.sapUiUfdSpltContCntnt{*/
+/*	overflow: auto;*/
+/*    -webkit-overflow-scrolling: touch;*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    bottom: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*	background: #2f3c47 !important;*/
+/*}*/
+
+.vinti{
+	color: yellow !important;
+	margin-right: 5px !important;
+	margin-left: 5px !important;
+}
+
+.persi{
+	color: black !important;
+	margin-right: 5px !important;
+	margin-left: 5px !important;
+}
+
+.sapMPanelBG{
+	
+}
+
+.sapMPanelContent{
+	padding: 0rem;
+	border-bottom: 1px solid #eee;
+}
 .showButtons{
 	opacity: 0;
+}
+
+.eschifo{
+	background-color: #F00 !important;
+}
+.emah{
+	background-color: #FF0 !important;
+}
+.ewow{
+	background-color: #0B0 !important;
 }
