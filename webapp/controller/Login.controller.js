@@ -16,10 +16,6 @@ sap.ui.define([
 
         doLogin: function () {
             sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");
-        },
-
-        openAbout: function () {
-            sap.ui.core.UIComponent.getRouterFor(this).navTo("About");
         }
 
         /**
