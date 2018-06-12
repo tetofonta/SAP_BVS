@@ -10,7 +10,7 @@ let getSavedMatches = "getSavedMatches";
 let getPlayers = "getPlayers";
 
 
-let apiHost = "http://cors.io/?http://bettervolleyscouting.altervista.org";
+let apiHost = "https://cors.io/?http://bettervolleyscouting.altervista.org";
 
 function getFromApi(res, prams) {
     if (!res.startsWith("/")) res = "/" + res;

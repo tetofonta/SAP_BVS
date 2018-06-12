@@ -1,6 +1,8 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.Game"
 	xmlns:html="http://www.w3.org/1999/xhtml">
-			<Page title="{i18n>gameTitle}">
-				<content></content>
+			<Page id="view" title="{i18n>gameTitle}" showHeader="false">
+				<content>
+					<core:Fragment fragmentName="BVS.fragments.Campo" type="XML"></core:Fragment>
+				</content>
 			</Page>
 </mvc:View>
