@@ -592,13 +592,12 @@ sap.ui.define([
 			},
 			
 			_onRouteMatched : function (oEvent) {
-				var oArgs, oView, oQuery;
+				var oArgs, oQuery;
 				oArgs = oEvent.getParameter("arguments");
 				oQuery = oArgs["?query"];
-				if (oQuery)
-					console.log(oQuery);
-	
-			},
+				//if (oQuery)
+					//console.log(oQuery);
+			}
 
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.

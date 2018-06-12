@@ -21,6 +21,8 @@
 										path: '/players'
 									}">
 									<StandardListItem
+										type="Active"
+										press="playerSelect"
 										title="{nome}"
 										description="{numero}"
 										icon="{foto}"/>
