@@ -1,45 +1,69 @@
+function httpGet(theUrl) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", theUrl, false); // false for synchronous request
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+}
+
+var getTeams = "getTeams";
+var getSavedMatches = "getSavedMatches";
+var getPlayers = "getPlayers";
+
+
+var apiHost = "http://127.0.0.1";
+function getFromApi(res, prams){
+	if(!res.startsWith("/")) res = "/" + res;
+	if(!res.endsWith(".php")) res = res + ".php";
+	
+	if(prams !== undefined){
+		res += "?";
+		Object.keys(prams).forEach(function(e){
+			res += e + "=" + prams[e] + "&";
+		});
+		res += "foo=foo";
+	}
+	return JSON.parse(httpGet((apiHost + res).replace(" ", "%20")));
+}
+var oModel = {};
+
 sap.ui.define([
-	"sap/ui/core/mvc/Controller"
-], function(Controller) {
+	"sap/ui/core/mvc/Controller",
+	'sap/ui/model/json/JSONModel'
+], function(Controller, JSONModel) {
 	"use strict";
 
 	return Controller.extend("BVS.controller.Home", {
-
-		/**
-		 * Called when a controller is instantiated and its View controls (if available) are already created.
-		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-		 * @memberOf BVS.view.Home
-		 */
-		//	onInit: function() {
-		//
-		//	},
-
-		/**
-		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
-		 * (NOT before the first rendering! onInit() is used for that one!).
-		 * @memberOf BVS.view.Home
-		 */
-		//	onBeforeRendering: function() {
-		//
-		//	},
-
-		/**
-		 * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
-		 * This hook is the same one that SAPUI5 controls get after being rendered.
-		 * @memberOf BVS.view.Home
-		 */
-		//	onAfterRendering: function() {
-		//
-		//	},
-
-		/**
-		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
-		 * @memberOf BVS.view.Home
-		 */
-		//	onExit: function() {
-		//
-		//	}
-
+		
+		onInit: function(){
+			oModel = new JSONModel({
+				saved: [],
+				players: [],
+				squadre: [...getFromApi(getTeams), {squadra: "+++ Aggiungi squadra +++"}]
+			}, true);
+			this.getView().setModel(oModel);
+		},
+		
+		loadTeam: function(oEvent){
+			if(oEvent.getSource()._lastValue !== "+++ Aggiungi squadra +++"){
+				oModel.setProperty("/saved", getFromApi(getSavedMatches, {SQUADRA: oEvent.getSource()._lastValue}));
+				oModel.setProperty("/players", getFromApi(getPlayers, {SQUADRA: oEvent.getSource()._lastValue}));
+				document.getElementsByClassName("footer")[0].style.opacity = "1.0 !important";
+			} else {
+				//TODO: aggiungi squadra
+			}
+		},
+		
+		deleteMatch: function(){
+			//TODO
+		},
+		
+		deletePlayer: function(){
+			//TODO
+		},
+		
+		newMatch: function(){
+			sap.ui.core.UIComponent.getRouterFor(this).navTo("Game");
+		}
 	});
 
 });
