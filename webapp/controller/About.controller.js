@@ -1,45 +1,38 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
-], function (Controller) {
-    "use strict";
+        'sap/ui/core/mvc/Controller',
+        'sap/ui/model/json/JSONModel'],
+    function (Controller, JSONModel) {
+        "use strict";
+        return Controller.extend("sap.m.sample.FormattedText.C", {
+            onInit: function () {
 
-    return Controller.extend("BVS.controller.App", {
-
-        /**
-         * Called when a controller is instantiated and its View controls (if available) are already created.
-         * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-         * @memberOf BVS.view.Login
-         */
-        //	onInit: function() {
-        //
-        //	},
-
-        /**
-         * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
-         * (NOT before the first rendering! onInit() is used for that one!).
-         * @memberOf BVS.view.Login
-         */
-        //	onBeforeRendering: function() {
-        //
-        //	},
-
-        /**
-         * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
-         * This hook is the same one that SAPUI5 controls get after being rendered.
-         * @memberOf BVS.view.Login
-         */
-        //	onAfterRendering: function() {
-        //
-        //	},
-
-        /**
-         * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
-         * @memberOf BVS.view.Login
-         */
-        //	onExit: function() {
-        //
-        //	}
-
+                // HTML string bound to the formatted text control
+                var oModel = new JSONModel({
+                    HTML: "<h2>" +
+                    "<strong>Better Volley Scouting</strong>" +
+                    "</h2>" +
+                    "<p>App creata da:</p>" +
+                    "<ul>" +
+                    "<li>" +
+                    "<strong>Francesco Torli</strong>" +
+                    "</li>" +
+                    "<li>" +
+                    "<strong>Lorenzo Moreschi</strong>" +
+                    "</li>" +
+                    "<li>" +
+                    "<strong>Simone Gaffurini</strong>" +
+                    "</li>" +
+                    "<li>" +
+                    "<strong>Stefano Fontana</strong>" +
+                    "</li>" +
+                    "</ul>" +
+                    "<p>Studenti dell'ITIS Castelli di Brescia.</p>" +
+                    "<p>Stage 2017/2018.</p>" +
+                    "<p>Documentazione:" +
+                    "<a title='Documentazione' href='https://goo.gl/JhMymi' target='_blank'>https://goo.gl/JhMymi</a>" +
+                    "</p>"
+                });
+                this.getView().setModel(oModel);
+            }
+        });
     });
-
-});
