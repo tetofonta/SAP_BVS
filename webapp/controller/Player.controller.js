@@ -50,26 +50,31 @@ sap.ui.define([
             var oArgs, oQuery;
             oArgs = oEvent.getParameter("arguments");
             oQuery = oArgs["?query"];
-            if (oQuery)
-                squadraPlayer = oQuery.squadra;
-            numeroPlayer = oQuery.numero;
-            //console.log(getFromApi(getPlayer, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer})[0]);
-            this.getView().byId('profilePic').setSrc(getFromApi(getPlayer, {
-                NUMERO: numeroPlayer,
-                SQUADRA: squadraPlayer
-            })[0].foto);
-            this.getView().byId('nomecognomeField').setValue(getFromApi(getPlayer, {
-                NUMERO: numeroPlayer,
-                SQUADRA: squadraPlayer
-            })[0].nome);
-            this.getView().byId('numeroField').setValue(getFromApi(getPlayer, {
-                NUMERO: numeroPlayer,
-                SQUADRA: squadraPlayer
-            })[0].numero);
-            this.getView().byId('datanascitaField').setValue(getFromApi(getPlayer, {
-                NUMERO: numeroPlayer,
-                SQUADRA: squadraPlayer
-            })[0].data_di_nascita);
+            if (oQuery){
+            	squadraPlayer = oQuery.squadra;
+	            numeroPlayer = oQuery.numero;
+	            sap.ui.core.BusyIndicator.show(0);
+	            var mthis = this;
+	            setTimeout(function(){
+	            	mthis.getView().byId('profilePic').setSrc(getFromApi(getPlayer, {
+		                NUMERO: numeroPlayer,
+		                SQUADRA: squadraPlayer
+		            })[0].foto);
+		            mthis.getView().byId('nomecognomeField').setValue(getFromApi(getPlayer, {
+		                NUMERO: numeroPlayer,
+		                SQUADRA: squadraPlayer
+		            })[0].nome);
+		            mthis.getView().byId('numeroField').setValue(getFromApi(getPlayer, {
+		                NUMERO: numeroPlayer,
+		                SQUADRA: squadraPlayer
+		            })[0].numero);
+		            mthis.getView().byId('datanascitaField').setValue(getFromApi(getPlayer, {
+		                NUMERO: numeroPlayer,
+		                SQUADRA: squadraPlayer
+		            })[0].data_di_nascita);
+		            sap.ui.core.BusyIndicator.hide();
+	            }, 0)
+            }
         }
 
         /**
