@@ -8,7 +8,7 @@
 									<layoutData>
 										<FlexItemData growFactor="1"/>
 									</layoutData>
-								</Image>
+								</Image> 
 								<Button icon="sap-icon://add-photo" width="250px" press="takePic" text="Aggiungi da fotocamera"/>
 								<Button icon="sap-icon://upload" width="250px" press="choosePic" text="Carica foto"/>
 							</VBox>

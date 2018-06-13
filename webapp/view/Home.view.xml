@@ -45,7 +45,7 @@
 					</VBox>
 				</content>
 				<footer>
-					<OverflowToolbar>
+					<OverflowToolbar> 
 						<Button id="as" press="newPlayer" type="Accept" class="showButtons" icon="sap-icon://add" text="Nuovo Giocatore"/>
 						<ToolbarSpacer/>
 						<Button id="newMatch" press="newMatch" type="Accept" class="showButtons" icon="sap-icon://begin" text="Nuova partita"/>
