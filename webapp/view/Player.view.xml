@@ -1,22 +1,16 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.Player"
-	xmlns:html="http://www.w3.org/1999/xhtml">
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" controllerName="BVS.controller.Player">
 			<Page title="{i18n>playerTitle}">
 				<content>
 					<VBox>
 						<HBox>
 							<VBox>
-								<Image
-									id="profilePic"
-									src=""
-									densityAware="false"
-									width='250px'
-									height='250px'
-									>
+								<Image id="profilePic" src="" densityAware="false" width="250px" height="250px">
 									<layoutData>
-										<FlexItemData growFactor="1" />
+										<FlexItemData growFactor="1"/>
 									</layoutData>
 								</Image>
-								<Button icon="sap-icon://add-photo" press="changePic"/>
+								<Button icon="sap-icon://add-photo" width="250px" press="takePic" text="Aggiungi da fotocamera"/>
+								<Button icon="sap-icon://upload" width="250px" press="choosePic" text="Carica foto"/>
 							</VBox>
 							<VBox>
 								<Label text="Nome e Cognome" labelFor="nomecognomeField"/>
@@ -26,6 +20,7 @@
 								<Label text="Data di nascita" labelFor="datanascitaField"/>
 								<DatePicker id="datanascitaField" valueFormat="yyyy-MM-dd"/>
 							</VBox>
+						<items/>
 						</HBox>
 					</VBox>
 				</content>
