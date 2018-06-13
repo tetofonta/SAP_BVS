@@ -43,12 +43,14 @@
 							</VBox>
 						</HBox>
 					</VBox>
-					
-					<OverflowToolbar>
-						<ToolbarSpacer/>
-						<Button id="newMatch" press="newMatch" type="Accept" class="showButtons" text="Nuova partita"/>
-						<Button id="deleteTeam" press="deleteTeam" type="Reject" class="showButtons" text="Elimina squadra"/>
-					</OverflowToolbar>
 				</content>
+				<footer>
+					<OverflowToolbar> 
+						<Button id="as" press="newPlayer" type="Accept" class="showButtons" icon="sap-icon://add" text="Nuovo Giocatore"/>
+						<ToolbarSpacer/>
+						<Button id="newMatch" press="newMatch" type="Accept" class="showButtons" icon="sap-icon://begin" text="Nuova partita"/>
+						<Button id="deleteTeam" press="deleteTeam" type="Reject" class="showButtons" icon="sap-icon://delete" text="Elimina squadra"/>
+					</OverflowToolbar>
+				</footer>
 			</Page>
 </mvc:View>
