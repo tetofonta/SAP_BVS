@@ -8,7 +8,7 @@
 			initialFocus="email">
 		<footer>
 		</footer>
-		<HBox visible="false" id="cosse">
+		<HBox id="cosse">
 			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout eschifo" header="Battuta brutta"
 				subheader="" press="battutaBrutta">
 			</GenericTile>
