@@ -37,8 +37,10 @@
 										path: '/saved'
 									}">
 									<StandardListItem
+										type="Active"
+										press="getReport"
 										title="{squadra} - {avversario}"
-										description="{data}" />
+										description="{id} - {data}" />
 								</List>
 							</VBox>
 						</HBox>

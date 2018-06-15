@@ -127,6 +127,14 @@ sap.ui.define([
 					giocatori: JSON.stringify(curPlayers)
 				}
 			});
+        },
+        
+        getReport: function(e){
+        	sap.ui.core.UIComponent.getRouterFor(this).navTo("showReport", {
+        		query:{
+        			id: oModel.getProperty("/saved")[e.getSource().sId.split('-')[2]].id,
+        		}
+        	});
         }
     });
 

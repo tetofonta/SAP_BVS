@@ -1,3 +1,60 @@
+function httpGet(theUrl) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", theUrl, false); // false for synchronous request
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+}
+
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+
+var getTeams = "getTeams";
+var getSavedMatches = "getSavedMatches";
+var getPlayers = "getPlayers";
+
+
+var apiHost = "https://cors.io/?http://bettervolleyscouting.altervista.org";
+
+function getFromApi(res, prams) {
+    if (!res.startsWith("/")) res = "/" + res;
+    if (!res.endsWith(".php")) res = res + ".php";
+
+    if (prams !== undefined) {
+        res += "?";
+        Object.keys(prams).forEach(function (e) {
+            res += e + "=" + prams[e] + "&";
+        });
+        res += "foo=foo";
+    }
+    return JSON.parse(httpGet((apiHost + res).replace(" ", "%20")));
+}
+
+function getFromApiAsync(res, cb, prams) {
+    if (!res.startsWith("/")) res = "/" + res;
+    if (!res.endsWith(".php")) res = res + ".php";
+
+    if (prams !== undefined) {
+        res += "?";
+        Object.keys(prams).forEach(function (e) {
+            res += e + "=" + prams[e] + "&";
+        });
+        res += "foo=foo";
+    }
+    httpGetAsync((apiHost + res).replace(" ", "%20"), function(data){
+    	cb(/*JSON.parse(data)*/"aa", data);
+    }, prams);
+    
+}
+
+var McurrentTeam;
 var PALLEGGIO = "palleggio",
     MURO = "muro",
     SCHIACCIATA = "schiacciata",
@@ -33,8 +90,8 @@ var fineSound = new Audio("audio/fine.ogg");
 var panchina_selector;
 var panchina_selector_array = [];
 var panchina = [];
-var topSet = 25;
-var betterThan = 5;
+var topSet = 5;
+var betterThan = 3;
 var mieiSet = 0;
 var suoiset = 0;
 var cambiando;
@@ -46,6 +103,7 @@ var lay = [];
 var riepilogoPage;
 var aboutPage;
 var isTheMatchStarted = false;
+var busy;
 
 function abilitaChiNonBatte() {
     for (var k = 1; k <= 6; k++) {
@@ -93,7 +151,15 @@ function resetfnc() {
         punti: []
     };
     $("#confetti").css("display", "none");
-    mthis.ciaoDialog.close();
+    
+    isTheMatchStarted = false;
+	mthis.getView().byId("play").setVisible(true);
+	
+	mthis.getView().byId("puntomio").setVisible(false);
+	mthis.getView().byId("puntomio_t").setVisible(false);
+	mthis.getView().byId("puntoloro").setVisible(false);
+	mthis.getView().byId("puntoloro_t").setVisible(false);
+    	
 }
 
 function clone(obj) {
@@ -151,6 +217,7 @@ function gooriep() {
 }
 
 function finePartita() {
+	console.log(currentPartita);
     setTimeout(function () {
         fineSound.play();
     }, 1502);
@@ -159,7 +226,15 @@ function finePartita() {
     if (!mthis.ciaoDialog) {
         mthis.ciaoDialog = new dialogg({
             title: "Partita terminata!",
-            content: lay,
+            content: [
+            	new buttonn({
+            		text: "Torna indietro",
+            		press: function(){
+            			sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home");
+		        	}
+            	}),
+            	new busy( "fabrizia", {})
+            ],
             beginButton: new buttonn({
                 text: "Close",
                 press: function () {
@@ -173,6 +248,32 @@ function finePartita() {
         mthis.getView().addDependent(this.ciaoDialog);
     }
     mthis.ciaoDialog.open();
+    setTimeout(function(){
+    	var obj = [];
+    	var fa = true;
+    	currentPartita.forEach(function(e){
+		   e.punti.forEach(function(i){
+				i.azione.forEach(function(o){
+					obj.push({
+						giocatore: o.giocatore,
+						azione: o.azione,
+						qualita: o.qualita,
+						puntiMiei: i.puntoMio,
+						puntiLoro: i.puntoSuo,
+						fineAzione: fa ? 1 : 0
+					});
+					fa = false;
+		        });
+		        fa = true;
+		   });
+		});
+		console.log(obj);
+		getFromApiAsync("saveMatch", function(data, res){
+			console.log(res);
+			$("#fabrizia-busyIndicator").css("display", "none");
+		}, {JSON: JSON.stringify(obj), SQUADRA: McurrentTeam, AVV: mthis.getView().byId("avversari").getValue()});
+    }, 0);
+    
 }
 
 function pushAzione(azione, giocatore, qualita) {
@@ -297,6 +398,8 @@ var bottoni = [];
 function find(a) {
     var i;
     for (i = 0; i < 6; i++) {
+    	console.log(a);
+    	console.log(bottoni[i].numero)
         if (bottoni[i].numero === a)
             break;
     }
@@ -324,8 +427,9 @@ sap.ui.define([
     "sap/m/StandardListItem",
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/HTML",
-    "sap/ui/model/json/JSONModel"
-], function (jQuery, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "sap/m/BusyIndicator"
+], function (jQuery, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel, Busy) {
     "use strict";
 
     return Controller.extend("BVS.controller.Game", {
@@ -344,6 +448,7 @@ sap.ui.define([
 
             buttonn = Button;
             dialogg = Dialog;
+            busy = Busy;
 
             panchina_selector = new VBox();
             var cambi = new HBox();
@@ -423,7 +528,7 @@ sap.ui.define([
                     var i = find(a.target.innerHTML);
                     cambiando = bottoni[i].ref;
 
-                    if (cambiando === foo.getView().byId("g6")) isbatting = true;
+                    if (cambiando === foo.getView().byId("g6") && chiHaSegnato && isTheMatchStarted) isbatting = true;
                     else isbatting = false;
 
                     cambiando_idx = i;
@@ -441,6 +546,7 @@ sap.ui.define([
                     }
                 });
             }
+            resetfnc();
         },
 
         _onRouteMatched: function (oEvent) {
@@ -450,6 +556,7 @@ sap.ui.define([
             if (oQuery) {
                 oModel.setProperty("/changable", JSON.parse(oQuery.giocatori));
             	this.getView().byId("npp").setText(oQuery.squadra + " vs     ")
+            	McurrentTeam = oQuery.squadra;
             }
         },
 
@@ -457,14 +564,16 @@ sap.ui.define([
             var changable = oModel.getProperty("/changable");
             var id = oEvent.getSource().sId;
             var selected = id.substr(id.lastIndexOf("-") + 1, id.lenght);
-            var onum = cambiando.getText();
-            var onam = cambiando.nome ? cambiando.nome : "come cazzo lo posso sapere?";
-
             var btn = $("#" + cambiando.getId()).get()[0];
+
+            var onum = btn.childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML;
+            var onam = cambiando.nome ? cambiando.nome : "come cazzo lo posso sapere?";
+            cambiando.numero = changable[selected].numero;
 		    btn.childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML = changable[selected].numero;
+		    bottoni[cambiando_idx].numero = changable[selected].numero;
             
             cambiando.nome = changable[selected].nome;
-            bottoni[cambiando_idx].numero = changable[selected].numero;
+            cambiando.numero = changable[selected].numero;
             
             if (isTheMatchStarted) {
                 changable[selected] = {
@@ -576,10 +685,6 @@ sap.ui.define([
         	
         	for (var k = 1; k <= 6; k++) {
                 btn = this.getView().createId("g" + k);
-                bottoni[k - 1] = {};
-                bottoni[k - 1].numero = this.getView().byId("g" + k).getText();
-                bottoni[k - 1].ref = this.getView().byId("g" + k);
-        	
 		    	$("#" + btn).draggable({
 		                cancel: true,
 		                revert: true,

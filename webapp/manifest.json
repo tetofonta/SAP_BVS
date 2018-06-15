@@ -101,6 +101,11 @@
           "name": "About",
           "pattern": "About",
           "target": "About"
+        },
+        {
+          "name": "showReport",
+          "pattern": "showReport/:?query:",
+          "target": "showReport"
         }
       ],
       "targets": {
@@ -133,6 +138,11 @@
           "viewId": "about",
           "viewName": "About",
           "transition": "flip"
+        },
+        "showReport": {
+          "viewId": "showreport",
+          "viewName": "showReport",
+          "transition": "slide"
         }
       }
     },
