@@ -4,7 +4,7 @@
 				<content>
 					<VBox justifyContent="Center">
 						<HBox justifyContent="End">
-						<ComboBox change="loadTeam"
+						<ComboBox id="sqList" change="loadTeam"
 							items="{
 								path: '/squadre'			
 							}">
@@ -38,9 +38,10 @@
 									}">
 									<StandardListItem
 										type="Active"
-										press="getReport"
 										title="{squadra} - {avversario}"
-										description="{id} - {data}" />
+										description="{data}" 
+										info="Id: {id}"
+										press="getReport"/>
 								</List>
 							</VBox>
 						</HBox>
@@ -48,7 +49,7 @@
 				</content>
 				<footer>
 					<OverflowToolbar> 
-						<Button id="as" press="newPlayer" type="Accept" class="showButtons" icon="sap-icon://add" text="Nuovo Giocatore"/>
+						<Button id="as" press="addPlayer" type="Accept" class="showButtons" icon="sap-icon://add" text="Nuovo Giocatore"/>
 						<ToolbarSpacer/>
 						<Button id="newMatch" press="newMatch" type="Accept" class="showButtons" icon="sap-icon://begin" text="Nuova partita"/>
 						<Button id="deleteTeam" press="deleteTeam" type="Reject" class="showButtons" icon="sap-icon://delete" text="Elimina squadra"/>

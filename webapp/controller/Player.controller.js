@@ -1,3 +1,9 @@
+String.prototype.replaceAll = function (search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+
 function httpGet(theUrl) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", theUrl, false); // false for synchronous request
@@ -8,6 +14,9 @@ function httpGet(theUrl) {
 var getTeams = "getTeams";
 var getSavedMatches = "getSavedMatches";
 var getPlayer = "getPlayer";
+var setPlayer = "setPlayer";
+var addPlayer = "addPlayer";
+var addTeam = "addTeam";
 
 var squadraPlayer = "";
 var numeroPlayer = "";
@@ -25,12 +34,16 @@ function getFromApi(res, prams) {
         });
         res += "foo=foo";
     }
+    console.log(res);
     return JSON.parse(httpGet((apiHost + res).replace(" ", "%20")));
 }
 
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
-], function (Controller) {
+    "sap/ui/core/mvc/Controller",
+    'sap/m/Button',
+    'sap/m/Dialog',
+    'sap/m/Text'
+], function (Controller, Button, Dialog, Text) {
     "use strict";
 
     return Controller.extend("BVS.controller.Player", {
@@ -50,32 +63,56 @@ sap.ui.define([
             var oArgs, oQuery;
             oArgs = oEvent.getParameter("arguments");
             oQuery = oArgs["?query"];
-            if (oQuery){
-            	squadraPlayer = oQuery.squadra;
-	            numeroPlayer = oQuery.numero;
-	            sap.ui.core.BusyIndicator.show(0);
-	            var mthis = this;
-	            setTimeout(function(){
-	            	mthis.getView().byId('profilePic').setSrc(getFromApi(getPlayer, {
-		                NUMERO: numeroPlayer,
-		                SQUADRA: squadraPlayer
-		            })[0].foto);
-		            mthis.getView().byId('nomecognomeField').setValue(getFromApi(getPlayer, {
-		                NUMERO: numeroPlayer,
-		                SQUADRA: squadraPlayer
-		            })[0].nome);
-		            mthis.getView().byId('numeroField').setValue(getFromApi(getPlayer, {
-		                NUMERO: numeroPlayer,
-		                SQUADRA: squadraPlayer
-		            })[0].numero);
-		            mthis.getView().byId('datanascitaField').setValue(getFromApi(getPlayer, {
-		                NUMERO: numeroPlayer,
-		                SQUADRA: squadraPlayer
-		            })[0].data_di_nascita);
-		            sap.ui.core.BusyIndicator.hide();
-	            }, 0)
+            if (oQuery) {
+                squadraPlayer = oQuery.squadra;
+                numeroPlayer = oQuery.numero;
+                if (numeroPlayer === "null") {
+                		this.getView().byId('profilePic').setSrc("./image/nopic.png");
+	                    this.getView().byId('nomecognomeField').setValue("");
+	                    this.getView().byId('numeroField').setValue("");
+	                    this.getView().byId('datanascitaField').setValue("");
+                	if(squadraPlayer === "null"){ //AGGIUNGI SQUADRA
+                		this.getView().byId('squadraField').setEnabled(true);
+                		this.getView().byId("multiBtn").setText("Aggiungi squadra");
+                		this.getView().byId('squadraField').setValue("");
+	                    this.getView().byId("multiBtn").setIcon("sap-icon://add-activity");
+                	}else{ //NEW PLAYER
+                		this.getView().byId('squadraField').setEnabled(false);
+                		this.getView().byId('squadraField').setValue(squadraPlayer);
+                		this.getView().byId("multiBtn").setText("Aggiungi giocatore");
+	                    this.getView().byId("multiBtn").setIcon("sap-icon://add");
+                	}
+                } else { //EDIT PLAYER
+                    sap.ui.core.BusyIndicator.show(0);
+                    this.getView().byId('squadraField').setEnabled(false);
+                    this.getView().byId("multiBtn").setText("Modifica giocatore");
+                    this.getView().byId("multiBtn").setIcon("sap-icon://edit");
+                    var mthis = this;
+
+                    setTimeout(function () {
+                    	mthis.getView().byId('squadraField').setValue(squadraPlayer);
+                        mthis.getView().byId('profilePic').setSrc(getFromApi(getPlayer, {
+                            NUMERO: numeroPlayer,
+                            SQUADRA: squadraPlayer
+                        })[0].foto.replaceAll(' ', '+'));
+                        mthis.getView().byId('nomecognomeField').setValue(getFromApi(getPlayer, {
+                            NUMERO: numeroPlayer,
+                            SQUADRA: squadraPlayer
+                        })[0].nome);
+                        mthis.getView().byId('numeroField').setValue(getFromApi(getPlayer, {
+                            NUMERO: numeroPlayer,
+                            SQUADRA: squadraPlayer
+                        })[0].numero);
+                        mthis.getView().byId('datanascitaField').setValue(getFromApi(getPlayer, {
+                            NUMERO: numeroPlayer,
+                            SQUADRA: squadraPlayer
+                        })[0].data_di_nascita);
+                        sap.ui.core.BusyIndicator.hide();
+                    }, 0);
+                }
+
             }
-        }
+        },
 
         /**
          * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
@@ -91,9 +128,110 @@ sap.ui.define([
          * This hook is the same one that SAPUI5 controls get after being rendered.
          * @memberOf BVS.view.Player
          */
-        //	onAfterRendering: function() {
-        //
-        //	},
+
+        onAfterRendering: function () {
+            var loadFile = this.getView().createId("inFile");
+            $('#' + loadFile).append('<input id="myfile" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />');
+        },
+        onNavBack: function () {
+            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");
+        },
+
+        multiBtn: function () {
+            //console.log($('#__component0---player--profilePic')[0].src);
+            //console.log(resizeImg($('#__component0---player--profilePic')[0].src, 10, 10, 0));
+            if (numeroPlayer === "null") {
+            	if(squadraPlayer === "null"){ //AGGIUNGI SQUADRA
+            		var addableTeam = getFromApi(addTeam, {
+	                    NOME: this.getView().byId('nomecognomeField').getValue(),
+	                    NUMERO: this.getView().byId('numeroField').getValue(),
+	                    SQUADRA: this.getView().byId('squadraField').getValue(),
+	                    //FOTO: $('#__component0---player--profilePic')[0].src,
+	                    FOTO: "aaa",
+	                    DATANASCITA: this.getView().byId('datanascitaField').getValue()
+	                });
+	                if (!addableTeam) {
+	                    var dialog = new Dialog({
+	                        title: 'Errore',
+	                        type: 'Message',
+	                        state: 'Error',
+	                        content: new Text({
+	                            text: 'Esiste già una squadra con lo stesso nome.'
+	                        }),
+	                        beginButton: new Button({
+	                            text: 'OK',
+	                            press: function () {
+	                                dialog.close();
+	                            }
+	                        }),
+	                        afterClose: function () {
+	                            dialog.destroy();
+	                        }
+	                    });
+	                    dialog.open();
+	                }else {
+	                    sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
+	                        query: {
+	                            newTeam: true,
+	                            newTeamName: this.getView().byId('squadraField').getValue()
+	                        }
+	                    });
+	                }
+            	}else{//NEW PLAYER
+	                var addablePlayer = getFromApi(addPlayer, {
+	                    NOME: this.getView().byId('nomecognomeField').getValue(),
+	                    NUMERO: this.getView().byId('numeroField').getValue(),
+	                    SQUADRA: squadraPlayer,
+	                    //FOTO: $('#__component0---player--profilePic')[0].src,
+	                    FOTO: "aaa",
+	                    DATANASCITA: this.getView().byId('datanascitaField').getValue()
+	                });
+	                if (!addablePlayer) {
+	                    var dialog = new Dialog({
+	                        title: 'Errore',
+	                        type: 'Message',
+	                        state: 'Error',
+	                        content: new Text({
+	                            text: 'Il numero del giocatore è già presente in questa rosa.'
+	                        }),
+	                        beginButton: new Button({
+	                            text: 'OK',
+	                            press: function () {
+	                                dialog.close();
+	                            }
+	                        }),
+	                        afterClose: function () {
+	                            dialog.destroy();
+	                        }
+	                    });
+	                    dialog.open();
+	                } else {
+	                    sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
+	                        query: {
+	                            refreshTeam: true
+	                        }
+	                    });
+	                }
+            	}
+            } else { //EDIT
+                getFromApi(setPlayer, {
+                    NOME: this.getView().byId('nomecognomeField').getValue(),
+                    NUMERO: this.getView().byId('numeroField').getValue(),
+                    NUMEROVECCHIO: numeroPlayer,
+                    SQUADRA: squadraPlayer,
+                    //FOTO: $('#__component0---player--profilePic')[0].src,
+                    FOTO: "aaa",
+                    DATANASCITA: this.getView().byId('datanascitaField').getValue()
+                });
+                sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
+                    query: {
+                        refreshTeam: true
+                    }
+                });
+            }
+        }
+
+
 
         /**
          * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
