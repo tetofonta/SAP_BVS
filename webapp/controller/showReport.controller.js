@@ -16,6 +16,12 @@ function httpGetAsync(theUrl, callback)
     xmlHttp.send(null);
 }
 
+function getZero(obj){
+	var o = JSON.parse(JSON.stringify(obj));
+	o.count = 0;
+	return o;
+}
+
 
 var apiHost = "https://cors.io/?http://bettervolleyscouting.altervista.org";
 
@@ -51,10 +57,13 @@ function getFromApiAsync(res, cb, prams) {
     
 }
 
+var oModel_w;
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	'sap/ui/core/HTML'
-], function(Controller, HTML) {
+	'sap/ui/core/HTML',
+	'sap/ui/model/json/JSONModel',
+	"sap/m/IconTabFilter"
+], function(Controller, HTML, JSONModel, IconTabFilter) {
 	"use strict";
 
 	return Controller.extend("BVS.controller.showReport", {
@@ -66,8 +75,17 @@ sap.ui.define([
             if (oQuery){
             	var lol = getFromApi("getMatchReport", {ID: oQuery.id});
             	var str = "<tr>";
+            	var chrono = [];
+            	var k = 0;
             	lol.single.forEach(function(e){
             		e.forEach(function (i){
+            			
+            			chrono.push({
+            				azione: i.azione,
+            				incremental: k++,
+            				opt: parseInt(i.qualita, 10)
+            			});
+            			
             			var img = "";
             			if(i.azione === "Palleggio") img = "data:image/png;base64,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";
             			else if(i.azione === "Battuta") img = "data:image/png;base64,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";
@@ -107,6 +125,36 @@ sap.ui.define([
 			
 			        var oLayout = this.getView().byId("staticContentLayout");
 			        oLayout.addContent(oHtml);
+			        
+			        var global = new Map();
+			        var globalLinus = [];
+			        var pl = [];
+			        Object.keys(lol.byplayer).forEach(function(e){
+			        		pl.push(e)
+			        		lol.byplayer[e].forEach(function(i){
+			        			var key = JSON.stringify(getZero(i));
+			        			if(global.get(key) === undefined && parseInt(i.count, 10) > 0)
+			        				global.set(key, 1);
+			        			else if(parseInt(i.count, 10) > 0) global.set(key, global.get(key) + 1);
+			        		});
+			        });
+			        
+			        global.forEach(function(v, k){
+			        	var obj = JSON.parse(k);
+			        	obj.count = v;
+			        	globalLinus.push(obj);
+			        })
+
+					oModel_w = new JSONModel({
+						byplayer: lol.byplayer,
+						bakglobal: globalLinus,
+						global: globalLinus,
+						players: pl,
+						chrono: chrono
+					}, true);
+					
+					oModel_w.setDefaultBindingMode(sap.ui.model.BindingMode.OneWay);
+					this.getView().setModel(oModel_w)
 
             }
 		},
@@ -116,7 +164,7 @@ sap.ui.define([
 
             //this.getView().byId('profilePic').setSrc(getFromApi(getPlayer, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer}));
             //console.log(getFromApi(getPlayer, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer}));
-        }
+        },
 
 		/**
 		 * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -141,9 +189,26 @@ sap.ui.define([
 		 * This hook is the same one that SAPUI5 controls get after being rendered.
 		 * @memberOf BVS.view.showReport
 		 */
-		//	onAfterRendering: function() {
-		//
-		//	},
+		onAfterRendering: function() {
+			var mthis = this;
+			var aaa = new IconTabFilter({key: "global"});
+			aaa.setText("Globale");
+			mthis.getView().byId("tab").addItem(aaa)
+			JSON.parse(oModel_w.getJSON()).players.forEach(function(e){
+				aaa = new IconTabFilter({key: e});
+				aaa.setText(e);
+				mthis.getView().byId("tab").addItem(aaa)
+			});
+		},
+		
+		change: function(oEvent){
+			var play = oEvent.getSource().getSelectedKey()
+			if(play === "global"){
+				oModel_w.setProperty("/global", oModel_w.getProperty("/bakglobal"));
+			} else {
+				oModel_w.setProperty("/global", oModel_w.getProperty("/byplayer/" + play));
+			}
+		}
 
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.

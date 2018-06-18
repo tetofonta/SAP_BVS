@@ -1,13 +1,77 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.showReport"
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.showReport" xmlns:viz="sap.viz.ui5.controls" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout">
 	<App>
 		<pages>
-			<Page title="Title">
+			<Page title="Report">
 				<content>
 					 <l:HorizontalLayout id="staticContentLayout">
 	    				 <l:content>
 	    				</l:content>
 					</l:HorizontalLayout>
+					
+						<IconTabBar
+							id="tab"
+							expanded="{device>/isNoPhone}"
+							class="sapUiResponsiveContentPadding"
+							select="change">
+							<items>
+							</items>
+						</IconTabBar>
+					
+					<viz:Popover id="idPopOver"></viz:Popover>
+		            <viz:VizFrame id="idVizFrame" uiConfig="{applicationSet:'fiori'}"
+		                height='100%' width="100%" vizType='stacked_bar' vizTitle="Global Graph">
+		                <viz:dataset>
+		                    <viz.data:FlattenedDataset data="{/global}">
+		                        <viz.data:dimensions>
+		                            <viz.data:DimensionDefinition name="Azione"
+		                                value="{azione}" />
+		                            <viz.data:DimensionDefinition name="Result"
+		                                value="{result}" />
+		                        </viz.data:dimensions>
+		                        <viz.data:measures>
+		                            <viz.data:MeasureDefinition name="Count"
+		                                value="{count}" />
+		                        </viz.data:measures>
+		                    </viz.data:FlattenedDataset>
+		                </viz:dataset>
+		
+		                <viz:feeds>
+		                    <viz.feeds:FeedItem uid="valueAxis" type="Measure"
+		                        values="Count" />
+		                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension"
+		                        values="Azione" />
+		                    <viz.feeds:FeedItem uid="color" type="Dimension"
+		                        values="Result" />
+		                </viz:feeds>
+		            </viz:VizFrame>
+		            
+		            
+	             <viz:VizFrame id="idVizFrame2" uiConfig="{applicationSet:'fiori'}"
+	                height='100%' width="100%" vizType='line'>
+	                <viz:dataset>
+	                    <viz.data:FlattenedDataset data="{/chrono}">
+	                        <viz.data:dimensions>
+	                            <viz.data:DimensionDefinition name="Incremental"
+	                                value="{incremental}" />
+	                        </viz.data:dimensions>
+	                        <viz.data:measures>
+	                            <viz.data:MeasureDefinition name="ANDAMENTO"
+	                                value="{opt}" />
+	                        </viz.data:measures>
+	                    </viz.data:FlattenedDataset>
+	                </viz:dataset>
+	
+	                <viz:feeds>
+	                    <viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure"
+	                        values="ANDAMENTO" />
+	                    <viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension"
+	                        values="Incremental" />
+	                        
+	                </viz:feeds>
+	                 </viz:VizFrame>
+					            
 				</content>
 			</Page>
 		</pages>
