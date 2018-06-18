@@ -187,15 +187,6 @@ sap.ui.define([
         		}
         	});
 		},
-		matchSelect: function(e){
-        	//sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
-        		//query:{
-        			//numero: e.getSource().mProperties.description,
-        			//squadra: curTeam
-        		//}
-        	//});
-        	console.log(e.getSource());
-		},
         newMatch: function () {
             sap.ui.core.UIComponent.getRouterFor(this).navTo("Game", {
 				query: {
@@ -204,6 +195,7 @@ sap.ui.define([
 				}
 			});
         },
+
         _onRouteMatched: function (oEvent) {
             var oArgs, oQuery;
             oArgs = oEvent.getParameter("arguments");
@@ -226,7 +218,15 @@ sap.ui.define([
 		            this.getView().byId("sqList").setSelectedKey(oQuery.newTeamName);
 		            refresh();
             	}
-            }
+            },
+        
+        getReport: function(e){
+        	sap.ui.core.UIComponent.getRouterFor(this).navTo("showReport", {
+        		query:{
+        			id: oModel.getProperty("/saved")[e.getSource().sId.split('-')[2]].id,
+        		}
+        	});
+
         }
     });
 

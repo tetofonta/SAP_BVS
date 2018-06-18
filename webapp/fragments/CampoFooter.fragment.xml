@@ -4,21 +4,22 @@
 	
 	<Toolbar>
 		<HBox width="100%" id="__hbox6" alignContent="Center" alignItems="Center" justifyContent="Start">
-			<Button id="settings" icon="sap-icon://settings" press="settings"/>
+			<Button id="play" icon="sap-icon://begin" press="IniziaPartita"/>
 			<Text id="npp" text="MiaSquadra vs Avversari"/>
+			<Input id="avversari" placeholder="Squadra Avversaria"></Input>
 		</HBox>
 		<HBox width="100%" id="__hbox5" alignContent="Center" alignItems="Center" justifyContent="End">
 			<Text id="mieisetmancanti" text="█ █ █ █ █ " class="persi nonandareacapo"/>
 			<Text id="mieisetvinti" text="" class="vinti nonandareacapo"/>
-			<Button id="puntomio" class="puntipiu" icon="sap-icon://add" press="addPuntoMio"/>
-			<Button id="puntomio_t" class="puntimeno" icon="sap-icon://less" press="subPuntoMio"/>
+			<Button id="puntomio" visible="false" class="puntipiu" icon="sap-icon://add" press="addPuntoMio"/>
+			<Button id="puntomio_t" visible="false" class="puntimeno" icon="sap-icon://less" press="subPuntoMio"/>
 			<HBox>
 				<Text class="bigtext nonandareacapo" text="0" id="mieipunti"/>
 				<Text class="bigtext nonandareacapo" text=" - "/>
 				<Text class="bigtext nonandareacapo" text="0" id="tuoipunti"/>
 			</HBox>
-			<Button id="puntoloro" class="puntipiu" icon="sap-icon://add" press="addPuntoSuo"/>
-			<Button id="puntoloro_t" class="puntimeno" icon="sap-icon://less" press="subPuntoSuo"/>
+			<Button id="puntoloro" visible="false" class="puntipiu" icon="sap-icon://add" press="addPuntoSuo"/>
+			<Button id="puntoloro_t" visible="false" class="puntimeno" icon="sap-icon://less" press="subPuntoSuo"/>
 			<Text id="suoisetvinti" text="" class="vinti nonandareacapo"/>
 			<Text id="suoisetmancanti" text="█ █ █ █ █ " class="persi nonandareacapo"/>
 		</HBox>

@@ -41,7 +41,7 @@
 										title="{squadra} - {avversario}"
 										description="{data}" 
 										info="Id: {id}"
-										press="matchSelect"/>
+										press="getReport"/>
 								</List>
 							</VBox>
 						</HBox>
