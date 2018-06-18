@@ -218,7 +218,8 @@ sap.ui.define([
 		            this.getView().byId("sqList").setSelectedKey(oQuery.newTeamName);
 		            refresh();
             	}
-            },
+            }
+        },
         
         getReport: function(e){
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("showReport", {
