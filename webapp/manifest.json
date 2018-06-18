@@ -1,147 +1,136 @@
 {
-  "_version": "1.7.0",
-  "sap.app": {
-    "id": "BVS",
-    "type": "application",
-    "i18n": "i18n/i18n.properties",
-    "applicationVersion": {
-      "version": "1.0.0"
-    },
-    "title": "{{appTitle}}",
-    "description": "{{appDescription}}",
-    "sourceTemplate": {
-      "id": "ui5template.basicSAPUI5ApplicationProject",
-      "version": "1.40.12"
-    }
-  },
-  "sap.ui": {
-    "technology": "UI5",
-    "icons": {
-      "icon": "",
-      "favIcon": "",
-      "phone": "",
-      "phone@2": "",
-      "tablet": "",
-      "tablet@2": ""
-    },
-    "deviceTypes": {
-      "desktop": true,
-      "tablet": true,
-      "phone": true
-    },
-    "supportedThemes": [
-      "sap_hcb",
-      "sap_belize"
-    ]
-  },
-  "sap.ui5": {
-    "rootView": {
-      "viewName": "BVS.view.App",
-      "type": "XML"
-    },
-    "dependencies": {
-      "minUI5Version": "1.30.0",
-      "libs": {
-        "sap.ui.core": {},
-        "sap.m": {},
-        "sap.ui.layout": {},
-        "sap.ushell": {},
-        "sap.collaboration": {},
-        "sap.ui.comp": {},
-        "sap.uxap": {}
-      }
-    },
-    "contentDensities": {
-      "compact": true,
-      "cozy": true
-    },
-    "models": {
-      "i18n": {
-        "type": "sap.ui.model.resource.ResourceModel",
-        "settings": {
-          "bundleName": "BVS.i18n.i18n"
-        }
-      }
-    },
-    "routing": {
-      "config": {
-        "routerClass": "sap.m.routing.Router",
-        "viewType": "XML",
-        "viewPath": "BVS.view",
-        "controlId": "app",
-        "controlAggregation": "pages",
-        "transition": "slide",
-        "async": true,
-        "bypassed": {
-          "target": "notFound"
-        }
-      },
-      "routes": [
-        {
-          "pattern": "",
-          "name": "appLogin",
-          "target": "Login"
-        },
-        {
-          "name": "Home",
-          "pattern": "Home",
-          "target": "Home"
-        },
-        {
-          "name": "Game",
-          "pattern": "Game/:?query:",
-          "target": "Game"
-        },
-        {
-          "name": "Player",
-          "pattern": "Player/:?query:",
-          "target": "Player"
-        },
-        {
-          "name": "About",
-          "pattern": "About",
-          "target": "About"
-        }
-      ],
-      "targets": {
-        "Login": {
-          "viewId": "login",
-          "viewName": "Login",
-          "viewLevel": 1
-        },
-        "notFound": {
-          "viewId": "notFound",
-          "viewName": "NotFound",
-          "transition": "show"
-        },
-        "Home": {
-          "viewId": "home",
-          "viewName": "Home",
-          "transition": "slide"
-        },
-        "Game": {
-          "viewId": "game",
-          "viewName": "Game",
-          "transition": "slide"
-        },
-        "Player": {
-          "viewId": "player",
-          "viewName": "Player",
-          "transition": "slide"
-        },
-        "About": {
-          "viewId": "about",
-          "viewName": "About",
-          "transition": "flip"
-        }
-      }
-    },
-    "resources": {
-      "css": [
-        {
-          "uri": "css/style.css"
-        }
-      ]
-    }
-  }
+	"_version": "1.7.0",
+	"sap.app": {
+		"id": "BVS",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"sourceTemplate": {
+			"id": "ui5template.basicSAPUI5ApplicationProject",
+			"version": "1.40.12"
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": ["sap_hcb", "sap_belize"]
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "BVS.view.App",
+			"type": "XML"
+		},
+		"dependencies": {
+			"minUI5Version": "1.30.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.ui.layout": {},
+				"sap.ushell": {},
+				"sap.collaboration": {},
+				"sap.ui.comp": {},
+				"sap.uxap": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "BVS.i18n.i18n"
+				}
+			}
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "BVS.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"transition": "slide",
+				"async": true,
+				"bypassed": {
+					"target": "notFound"
+				}
+			},
+			"routes": [{
+				"pattern": "",
+				"name": "appLogin",
+				"target": "Login"
+			}, {
+				"name": "Home",
+				"pattern": "Home/:?query:",
+				"target": "Home"
+			}, {
+				"name": "Game",
+				"pattern": "Game/:?query:",
+				"target": "Game"
+			}, {
+				"name": "Player",
+				"pattern": "Player/:?query:",
+				"target": "Player"
+			}, {
+				"name": "About",
+				"pattern": "About",
+				"target": "About"
+			}],
+			"targets": {
+				"Login": {
+					"viewId": "login",
+					"viewName": "Login",
+					"viewLevel": 1
+				},
+				"notFound": {
+					"viewId": "notFound",
+					"viewName": "NotFound",
+					"transition": "show"
+				},
+				"Home": {
+					"viewId": "home",
+					"viewName": "Home",
+					"transition": "slide"
+				},
+				"Game": {
+					"viewId": "game",
+					"viewName": "Game",
+					"transition": "slide"
+				},
+				"Player": {
+					"viewId": "player",
+					"viewName": "Player",
+					"transition": "slide"
+				},
+				"About": {
+					"viewId": "about",
+					"viewName": "About",
+					"transition": "flip"
+				}
+			}
+		},
+		"resources": {
+			"css": [{
+				"uri": "css/style.css"
+			}]
+		}
+	}
 }
