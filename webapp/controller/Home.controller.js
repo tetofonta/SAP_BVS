@@ -5,6 +5,7 @@ function refresh(){
 	oModel.setProperty("/saved", data);
 	getFromApiAsync(getPlayers, function(dt){
 	oModel.setProperty("/players", dt);
+	curPlayers = [];
 	oModel.getProperty("/players").forEach(function(e){
 		e.foto = e.foto.replaceAll(' ', '+');
 		curPlayers.push({
@@ -85,6 +86,7 @@ function getFromApiAsync(res, cb, prams) {
 var oModel = {};
 var curTeam = "";
 var curPlayers = [];
+var user = "";
 
 sap.ui.define([
 	"jquery.sap.global",
@@ -95,16 +97,7 @@ sap.ui.define([
 
     return Controller.extend("BVS.controller.Home", {
         onInit: function () {
-			var squadre = getFromApi(getTeams);
 			sap.ui.core.UIComponent.getRouterFor(this).getRoute("Home").attachMatched(this._onRouteMatched, this);
-			squadre.push({squadra: "+++ Aggiungi squadra +++"});
-            oModel = new JSONModel({
-                saved: [],
-                players: [],
-                playersExport: [],
-                squadre: squadre
-            }, true);
-            this.getView().setModel(oModel);
         },
 
         loadTeam: function (oEvent) {
@@ -191,7 +184,8 @@ sap.ui.define([
             sap.ui.core.UIComponent.getRouterFor(this).navTo("Game", {
 				query: {
 					squadra : curTeam,
-					giocatori: JSON.stringify(curPlayers)
+					giocatori: JSON.stringify(curPlayers),
+					username: user
 				}
 			});
         },
@@ -201,6 +195,16 @@ sap.ui.define([
             oArgs = oEvent.getParameter("arguments");
             oQuery = oArgs["?query"];
             if (oQuery){
+            	var squadre = getFromApi(getTeams, {username: oQuery.username});
+            	user = oQuery.username;
+            	squadre.push({squadra: "+++ Aggiungi squadra +++"});
+	            oModel = new JSONModel({
+	                saved: [],
+	                players: [],
+	                playersExport: [],
+	                squadre: squadre
+	            }, true);
+	            this.getView().setModel(oModel);
             	if(oQuery.refreshTeam === "true"){
             		//console.log("refresh");
 	            	refresh();

@@ -179,6 +179,7 @@ function getNumeroGiocatore(btn) {
 
 var dialogg;
 var buttonn;
+var user = "";
 
 function dwld() {
     $("#foo").append("<a id='ciao' href='data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentPartita, null, ' ')) +
@@ -230,7 +231,11 @@ function finePartita() {
             	new buttonn({
             		text: "Torna indietro",
             		press: function(){
-            			sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home");
+            			sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home",{
+        		query:{
+        			username: user
+        		}
+        	});
 		        	}
             	}),
             	new busy( "fabrizia", {})
@@ -554,6 +559,7 @@ sap.ui.define([
             oArgs = oEvent.getParameter("arguments");
             oQuery = oArgs["?query"];
             if (oQuery) {
+            	user = oQuery.username;
                 oModel.setProperty("/changable", JSON.parse(oQuery.giocatori));
             	this.getView().byId("npp").setText(oQuery.squadra + " vs     ")
             	McurrentTeam = oQuery.squadra;
@@ -841,6 +847,21 @@ sap.ui.define([
 		            }
 		        });
         	}
+        },
+        
+        battutaSchifo: function(){
+        	battutaschifo();
+        	this._oPopover.close();
+        },
+        
+        battutaMah: function(){
+        	battutamah();
+        	this._oPopover.close();
+        },
+        
+        battutaWow: function(){
+        	battutawow();
+        	this._oPopover.close();
         }
             
 

@@ -5,9 +5,9 @@
             <VBox fitContainer="true" justifyContent="Start" alignItems="Center">
                 <items>
                     <Image src="./image/Logo.jpeg"/>
-                    <Input id="user" placeholder="Username"></Input>
+                    <Input id="username" placeholder="Username"></Input>
                     <Input id="password" placeholder="Password" type="Password"></Input>
-                    <Button width="192px" text="Enter" type="Emphasized" press="doLogin"></Button>
+                    <Button width="192px" text="Enter" id="enterBtn" type="Emphasized" press="doLogin"></Button>
                 </items>
             </VBox>
         </content>

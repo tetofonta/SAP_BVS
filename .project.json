@@ -44,6 +44,12 @@
     "sourceFolder": "webapp",
     "targetFolder": "dist",
     "excludedFolders": [],
-    "excludedFiles": []
+    "excludedFiles": [],
+    "lastBuildDateTime": "Tue, 19 Jun 2018 08:34:32 GMT"
+  },
+  "hcpdeploy": {
+    "account": "p2000122943trial",
+    "name": "sapbvs",
+    "lastVersionWeTriedToDeploy": "1.0.1"
   }
 }
