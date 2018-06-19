@@ -38,6 +38,8 @@ function getFromApi(res, prams) {
     return JSON.parse(httpGet((apiHost + res).replace(" ", "%20")));
 }
 
+var user = "";
+
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     'sap/m/Button',
@@ -64,6 +66,7 @@ sap.ui.define([
             oArgs = oEvent.getParameter("arguments");
             oQuery = oArgs["?query"];
             if (oQuery) {
+            	user = oQuery.username;
                 squadraPlayer = oQuery.squadra;
                 numeroPlayer = oQuery.numero;
                 if (numeroPlayer === "null") {
@@ -134,7 +137,11 @@ sap.ui.define([
             $('#' + loadFile).append('<input id="myfile" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />');
         },
         onNavBack: function () {
-            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");
+            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
+        		query:{
+        			username: user
+        		}
+        	});
         },
 
         multiBtn: function () {
@@ -173,7 +180,8 @@ sap.ui.define([
 	                    sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
 	                        query: {
 	                            newTeam: true,
-	                            newTeamName: this.getView().byId('squadraField').getValue()
+	                            newTeamName: this.getView().byId('squadraField').getValue(),
+	                            username: user
 	                        }
 	                    });
 	                }
@@ -208,7 +216,8 @@ sap.ui.define([
 	                } else {
 	                    sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
 	                        query: {
-	                            refreshTeam: true
+	                            refreshTeam: true,
+	                            username: user
 	                        }
 	                    });
 	                }
@@ -225,7 +234,8 @@ sap.ui.define([
                 });
                 sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
                     query: {
-                        refreshTeam: true
+                        refreshTeam: true,
+                        username: user
                     }
                 });
             }

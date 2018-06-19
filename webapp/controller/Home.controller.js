@@ -130,7 +130,8 @@ sap.ui.define([
                 sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
         		query:{
 	        		numero: "null",
-	        		squadra: "null"
+	        		squadra: "null",
+	        		username: user
 	        	}
 	        	});
             }
@@ -168,7 +169,8 @@ sap.ui.define([
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
         		query:{
         			numero: "null",
-        			squadra: curTeam
+        			squadra: curTeam,
+        			username: user
         		}
         	});
         },
@@ -176,7 +178,8 @@ sap.ui.define([
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
         		query:{
         			numero: e.getSource().mProperties.description,
-        			squadra: curTeam
+        			squadra: curTeam,
+        			username: user
         		}
         	});
 		},
