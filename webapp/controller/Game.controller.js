@@ -179,6 +179,8 @@ function getNumeroGiocatore(btn) {
 
 var dialogg;
 var buttonn;
+var labell;
+var textareaa;
 
 function dwld() {
     $("#foo").append("<a id='ciao' href='data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentPartita, null, ' ')) +
@@ -217,26 +219,31 @@ function gooriep() {
 }
 
 function finePartita() {
-	console.log(currentPartita);
+	//console.log(currentPartita);
     setTimeout(function () {
         fineSound.play();
     }, 1502);
     $("#confetti").css("display", "block");
 
     if (!mthis.ciaoDialog) {
-        mthis.ciaoDialog = new dialogg({
-            title: "Partita terminata!",
-            content: [
-            	new buttonn({
+    	var oVbox2 = new sap.m.VBox({width: "100%"});
+        oVbox2.setJustifyContent('Center');
+        oVbox2.setAlignItems('Center');
+        //oVbox2.addItem(new busy( "fabrizia", {}));
+        oVbox2.addItem(new buttonn({
             		text: "Torna indietro",
             		press: function(){
             			sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home");
 		        	}
-            	}),
-            	new busy( "fabrizia", {})
+            	}));
+        mthis.ciaoDialog = new dialogg({
+           title: "Partita terminata!",
+            content: [
+            	oVbox2,
+            	//new busy( "fabrizia", {})
             ],
             beginButton: new buttonn({
-                text: "Close",
+                text: "Chiudi",
                 press: function () {
                     resetfnc();
                     mthis.ciaoDialog.close();
@@ -248,6 +255,7 @@ function finePartita() {
         mthis.getView().addDependent(this.ciaoDialog);
     }
     mthis.ciaoDialog.open();
+    
     setTimeout(function(){
     	var obj = [];
     	var fa = true;
@@ -267,9 +275,9 @@ function finePartita() {
 		        fa = true;
 		   });
 		});
-		console.log(obj);
+		//console.log(obj);
 		getFromApiAsync("saveMatch", function(data, res){
-			console.log(res);
+			//console.log(res);
 			$("#fabrizia-busyIndicator").css("display", "none");
 		}, {JSON: JSON.stringify(obj), SQUADRA: McurrentTeam, AVV: mthis.getView().byId("avversari").getValue()});
     }, 0);
@@ -413,12 +421,16 @@ function disabilitaChiNonBatte() {
     }
 }
 
+
 var oModel;
 var isbatting;
 
 sap.ui.define([
 
     "jquery.sap.global",
+    'sap/m/TextArea',
+    'sap/m/Label',
+    'sap/m/Input',
     "sap/m/Button",
     "sap/m/Dialog",
     "sap/m/List",
@@ -429,7 +441,7 @@ sap.ui.define([
     "sap/ui/core/HTML",
     "sap/ui/model/json/JSONModel",
     "sap/m/BusyIndicator"
-], function (jQuery, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel, Busy) {
+], function (jQuery, TextArea, Label, Input, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel, Busy) {
     "use strict";
 
     return Controller.extend("BVS.controller.Game", {
@@ -448,6 +460,8 @@ sap.ui.define([
 
             buttonn = Button;
             dialogg = Dialog;
+            labell = Label;
+            textareaa = TextArea;
             busy = Busy;
 
             panchina_selector = new VBox();
@@ -668,179 +682,243 @@ sap.ui.define([
                 this.getView().byId("tuoipunti").setText(suoPunteggio);
             }
         },
-        
+
         IniziaPartita: function(){
-        	isTheMatchStarted = true;
-        	this.getView().byId("play").setVisible(false);
-        	
-        	this.getView().byId("puntomio").setVisible(true);
-        	this.getView().byId("puntomio_t").setVisible(true);
-        	this.getView().byId("puntoloro").setVisible(true);
-        	this.getView().byId("puntoloro_t").setVisible(true);
-        	
         	mthis = this;
-            var btn;
-            var thisBtn;
-            var foo = this;
-        	
-        	for (var k = 1; k <= 6; k++) {
-                btn = this.getView().createId("g" + k);
-		    	$("#" + btn).draggable({
-		                cancel: true,
-		                revert: true,
-		                //Ritorno
-		                revertDuration: "212.2",
-		                //Velocità di ritorno
-		                distance: 10,
-		                scroll: false,
-		                zindex: 100000,
-		                //helper: "clone",
-		                cursor: "move",
-		                drag: function (event, ui) {
-		                    mistannospostando = true;
-		                    thisBtn = event.target;
-		                    for (var j = 1; j <= 6; j++) {
-		                        if (foo.getView().createId("g" + j) !== event.target.id) {
-		                            //Se il giocatore non è lo stesso che ho selezionato
-		                            $("#" + foo.getView().createId("g" + j)).css("opacity", ".3"); //Cambia l'opacità del giocatore
-		                        }
-		                    }
-		                }
-		            });
-		            
-		            $("#" + this.getView().createId("muroBtn") + "-inner").droppable({
-		            over: function (event, ui) {
-		                currentAzione = MURO;
-		                $("#" + thisBtn.id).css("opacity", "0");
-		                $("#" + foo.getView().createId("top1")).fadeIn();
-		                $("#" + foo.getView().createId("top2")).fadeIn();
-		                $("#" + foo.getView().createId("top3")).fadeIn();
-		                hideOver(".punteggio3");
-		            }
-		        });
-		        $("#" + this.getView().createId("schiacciataBtn") + "-inner").droppable({
-		            over: function (event, ui) {
-		                currentAzione = SCHIACCIATA;
-		                $("#" + thisBtn.id).css("opacity", "0");
-		                $("#" + foo.getView().createId("top1")).fadeIn();
-		                $("#" + foo.getView().createId("top2")).fadeIn();
-		                $("#" + foo.getView().createId("top3")).fadeIn();
-		                hideOver(".punteggio3");
-		            }
-		        });
-		        $("#" + this.getView().createId("palleggioBtn") + "-inner").droppable({
-		            over: function (event, ui) {
-		                currentAzione = PALLEGGIO;
-		                $("#" + thisBtn.id).css("opacity", "0");
-		                $("#" + foo.getView().createId("left1")).fadeIn();
-		                $("#" + foo.getView().createId("left2")).fadeIn();
-		                $("#" + foo.getView().createId("left3")).fadeIn();
-		                hideOver(".punteggio1");
-		            }
-		        });
-		        $("#" + this.getView().createId("palleggio1Btn") + "-inner").droppable({
-		            over: function (event, ui) {
-		                currentAzione = PALLEGGIO;
-		                $("#" + thisBtn.id).css("opacity", "0");
-		                $("#" + foo.getView().createId("right1")).fadeIn();
-		                $("#" + foo.getView().createId("right2")).fadeIn();
-		                $("#" + foo.getView().createId("right3")).fadeIn();
-		                hideOver(".punteggio2");
-		            }
-		        });
-		        $("#" + this.getView().createId("bagherBtn") + "-inner").droppable({
-		            over: function (event, ui) {
-		                currentAzione = BAGHER;
-		                $("#" + thisBtn.id).css("opacity", "0");
-		                $("#" + foo.getView().createId("bottom1")).fadeIn();
-		                $("#" + foo.getView().createId("bottom2")).fadeIn();
-		                $("#" + foo.getView().createId("bottom3")).fadeIn();
-		                hideOver(".punteggio4");
-		            }
-		        });
-		        $("#" + this.getView().createId("tuffoBtn") + "-inner").droppable({
-		            over: function (event, ui) {
-		                currentAzione = SALVATAGGIO;
-		                $("#" + thisBtn.id).css("opacity", "0");
-		                $("#" + foo.getView().createId("bottom1")).fadeIn();
-		                $("#" + foo.getView().createId("bottom2")).fadeIn();
-		                $("#" + foo.getView().createId("bottom3")).fadeIn();
-		                hideOver(".punteggio4");
-		            }
-		        });
-		        $("#" + this.getView().createId("left1") + "-inner").droppable({
-		            //Male
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 1);
-		            }
-		        });
-		        $("#" + this.getView().createId("left2") + "-inner").droppable({
-		            //Buono
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 2);
-		            }
-		        });
-		        $("#" + this.getView().createId("left3") + "-inner").droppable({
-		            //Ottimo
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 3);
-		            }
-		        });
-		        $("#" + this.getView().createId("right1") + "-inner").droppable({
-		            //Male
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 1);
-		            }
-		        });
-		        $("#" + this.getView().createId("right2") + "-inner").droppable({
-		            //Buono
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 2);
-		            }
-		        });
-		        $("#" + this.getView().createId("right3") + "-inner").droppable({
-		            //Ottimo
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 3);
-		            }
-		        });
-		        $("#" + this.getView().createId("top1") + "-inner").droppable({
-		            //Male
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 1);
-		            }
-		        });
-		        $("#" + this.getView().createId("top2") + "-inner").droppable({
-		            //Buono
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 2);
-		            }
-		        });
-		        $("#" + this.getView().createId("top3") + "-inner").droppable({
-		            //Ottimo
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 3);
-		            }
-		        });
-		        $("#" + this.getView().createId("bottom1") + "-inner").droppable({
-		            //Male
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 1);
-		            }
-		        });
-		        $("#" + this.getView().createId("bottom2") + "-inner").droppable({
-		            //Buono
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 2);
-		            }
-		        });
-		        $("#" + this.getView().createId("bottom3") + "-inner").droppable({
-		            //Ottimo
-		            drop: function (event, ui) {
-		                pushAzione(currentAzione, getNumeroGiocatore(thisBtn), 3);
-		            }
-		        });
-        	}
+			if(mthis.getView().byId('avversari').getValue().length>0){
+				var oVbox1 = new sap.m.VBox({width: "100%"});
+	        	oVbox1.setJustifyContent('Center');
+	        	oVbox1.setAlignItems('Center');
+	        	oVbox1.addItem(new Label({text: 'Punti per set: '}));
+				oVbox1.addItem(new Input(mthis.getView().createId('setInput')));
+				oVbox1.addItem(new Label({text: 'Alla meglio dei: '}));
+				oVbox1.addItem(new Input(mthis.getView().createId('meglioDeiInput')));
+				var dialog = new Dialog({
+				title: 'Impostazioni partita',
+				type: 'Message',
+				content: oVbox1,
+				beginButton: new Button({
+					text: 'Inizia',
+					press: function () {
+						isTheMatchStarted = true;
+						//console.log(mthis.getView().byId('setInput').getValue());
+						topSet=mthis.getView().byId('setInput').getValue();
+						betterThan=mthis.getView().byId('meglioDeiInput').getValue();
+						var rest = "";
+						for (var i = 0; i < betterThan; i++){
+						rest += "\u2588 ";
+						}
+						mthis.getView().byId("suoisetmancanti").setText(rest);
+						mthis.getView().byId("mieisetmancanti").setText(rest);
+						mthis.getView().byId("play").setVisible(false);
+			        	
+			        	mthis.getView().byId("puntomio").setVisible(true);
+			        	mthis.getView().byId("puntomio_t").setVisible(true);
+			        	mthis.getView().byId("puntoloro").setVisible(true);
+			        	mthis.getView().byId("puntoloro_t").setVisible(true);
+			        	
+			        	
+			            var btn;
+			            var mthisBtn;
+			            var foo = mthis;
+			        	
+			        	for (var k = 1; k <= 6; k++) {
+			                btn = mthis.getView().createId("g" + k);
+					    	$("#" + btn).draggable({
+					                cancel: true,
+					                revert: true,
+					                //Ritorno
+					                revertDuration: "212.2",
+					                //Velocità di ritorno
+					                distance: 10,
+					                scroll: false,
+					                zindex: 100000,
+					                //helper: "clone",
+					                cursor: "move",
+					                drag: function (event, ui) {
+					                    mistannospostando = true;
+					                    mthisBtn = event.target;
+					                    for (var j = 1; j <= 6; j++) {
+					                        if (foo.getView().createId("g" + j) !== event.target.id) {
+					                            //Se il giocatore non è lo stesso che ho selezionato
+					                            $("#" + foo.getView().createId("g" + j)).css("opacity", ".3"); //Cambia l'opacità del giocatore
+					                        }
+					                    }
+					                }
+					            });
+					            
+					            $("#" + mthis.getView().createId("muroBtn") + "-inner").droppable({
+					            over: function (event, ui) {
+					                currentAzione = MURO;
+					                $("#" + mthisBtn.id).css("opacity", "0");
+					                $("#" + foo.getView().createId("top1")).fadeIn();
+					                $("#" + foo.getView().createId("top2")).fadeIn();
+					                $("#" + foo.getView().createId("top3")).fadeIn();
+					                hideOver(".punteggio3");
+					            }
+					        });
+					        $("#" + mthis.getView().createId("schiacciataBtn") + "-inner").droppable({
+					            over: function (event, ui) {
+					                currentAzione = SCHIACCIATA;
+					                $("#" + mthisBtn.id).css("opacity", "0");
+					                $("#" + foo.getView().createId("top1")).fadeIn();
+					                $("#" + foo.getView().createId("top2")).fadeIn();
+					                $("#" + foo.getView().createId("top3")).fadeIn();
+					                hideOver(".punteggio3");
+					            }
+					        });
+					        $("#" + mthis.getView().createId("palleggioBtn") + "-inner").droppable({
+					            over: function (event, ui) {
+					                currentAzione = PALLEGGIO;
+					                $("#" + mthisBtn.id).css("opacity", "0");
+					                $("#" + foo.getView().createId("left1")).fadeIn();
+					                $("#" + foo.getView().createId("left2")).fadeIn();
+					                $("#" + foo.getView().createId("left3")).fadeIn();
+					                hideOver(".punteggio1");
+					            }
+					        });
+					        $("#" + mthis.getView().createId("palleggio1Btn") + "-inner").droppable({
+					            over: function (event, ui) {
+					                currentAzione = PALLEGGIO;
+					                $("#" + mthisBtn.id).css("opacity", "0");
+					                $("#" + foo.getView().createId("right1")).fadeIn();
+					                $("#" + foo.getView().createId("right2")).fadeIn();
+					                $("#" + foo.getView().createId("right3")).fadeIn();
+					                hideOver(".punteggio2");
+					            }
+					        });
+					        $("#" + mthis.getView().createId("bagherBtn") + "-inner").droppable({
+					            over: function (event, ui) {
+					                currentAzione = BAGHER;
+					                $("#" + mthisBtn.id).css("opacity", "0");
+					                $("#" + foo.getView().createId("bottom1")).fadeIn();
+					                $("#" + foo.getView().createId("bottom2")).fadeIn();
+					                $("#" + foo.getView().createId("bottom3")).fadeIn();
+					                hideOver(".punteggio4");
+					            }
+					        });
+					        $("#" + mthis.getView().createId("tuffoBtn") + "-inner").droppable({
+					            over: function (event, ui) {
+					                currentAzione = SALVATAGGIO;
+					                $("#" + mthisBtn.id).css("opacity", "0");
+					                $("#" + foo.getView().createId("bottom1")).fadeIn();
+					                $("#" + foo.getView().createId("bottom2")).fadeIn();
+					                $("#" + foo.getView().createId("bottom3")).fadeIn();
+					                hideOver(".punteggio4");
+					            }
+					        });
+					        $("#" + mthis.getView().createId("left1") + "-inner").droppable({
+					            //Male
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 1);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("left2") + "-inner").droppable({
+					            //Buono
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 2);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("left3") + "-inner").droppable({
+					            //Ottimo
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 3);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("right1") + "-inner").droppable({
+					            //Male
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 1);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("right2") + "-inner").droppable({
+					            //Buono
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 2);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("right3") + "-inner").droppable({
+					            //Ottimo
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 3);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("top1") + "-inner").droppable({
+					            //Male
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 1);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("top2") + "-inner").droppable({
+					            //Buono
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 2);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("top3") + "-inner").droppable({
+					            //Ottimo
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 3);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("bottom1") + "-inner").droppable({
+					            //Male
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 1);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("bottom2") + "-inner").droppable({
+					            //Buono
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 2);
+					            }
+					        });
+					        $("#" + mthis.getView().createId("bottom3") + "-inner").droppable({
+					            //Ottimo
+					            drop: function (event, ui) {
+					                pushAzione(currentAzione, getNumeroGiocatore(mthisBtn), 3);
+					            }
+					        });
+			        	}
+						dialog.close();    	
+						
+					}
+				}),
+				endButton: new Button({
+					text: 'Annulla',
+					press: function () {
+						
+						dialog.close();
+					}
+				}),
+				afterClose: function() {
+					dialog.destroy();
+					
+				}
+			});
+					
+        	dialog.open();
+			}else{
+				var dialogoN = new Dialog({
+					title: 'Errore',
+					type: 'Message',
+					state: 'Error',
+					content: new Label({
+						text: 'Inserire un nome per la squadra avversaria.'
+					}),
+					beginButton: new Button({
+						text: 'OK',
+						press: function () {
+							dialogoN.close();
+						}
+					}),
+					afterClose: function() {
+						dialogoN.destroy();
+					}
+				});
+				
+			dialogoN.open();
+			}
         }
             
 
