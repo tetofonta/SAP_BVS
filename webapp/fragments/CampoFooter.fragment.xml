@@ -5,7 +5,7 @@
 	<Toolbar>
 		<HBox width="100%" id="__hbox6" alignContent="Center" alignItems="Center" justifyContent="Start">
 			<Button id="play" icon="sap-icon://begin" press="IniziaPartita"/>
-			<Text id="npp" text="MiaSquadra vs Avversari"/>
+			<Text id="npp" text="MiaSquadra vs Avversari" class="sapUiSmallMarginEnd"/>
 			<Input id="avversari" placeholder="Squadra Avversaria"></Input>
 		</HBox>
 		<HBox width="100%" id="__hbox5" alignContent="Center" alignItems="Center" justifyContent="End">

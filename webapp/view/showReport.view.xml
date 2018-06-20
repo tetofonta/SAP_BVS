@@ -3,7 +3,7 @@
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout">
 	<App>
 		<pages>
-			<Page title="Report">
+			<Page title="Report" showNavButton="true" navButtonPress="onNavBack">
 				<content>
 					 <l:HorizontalLayout id="staticContentLayout">
 	    				 <l:content>

@@ -123,6 +123,7 @@ sap.ui.define([
 			          }.bind(this)
 			        });
 			
+			
 			        var oLayout = this.getView().byId("staticContentLayout");
 			        oLayout.addContent(oHtml);
 			        
@@ -135,7 +136,7 @@ sap.ui.define([
 			        			var key = JSON.stringify(getZero(i));
 			        			if(global.get(key) === undefined && parseInt(i.count, 10) > 0)
 			        				global.set(key, 1);
-			        			else if(parseInt(i.count, 10) > 0) global.set(key, global.get(key) + 1);
+			        			else if(parseInt(i.count, 10) > 0) global.set(key, global.get(key) + parseInt(i.count, 10));
 			        		});
 			        });
 			        
@@ -164,6 +165,9 @@ sap.ui.define([
 
             //this.getView().byId('profilePic').setSrc(getFromApi(getPlayer, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer}));
             //console.log(getFromApi(getPlayer, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer}));
+        },
+        onNavBack: function () {
+            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");
         },
 
 		/**

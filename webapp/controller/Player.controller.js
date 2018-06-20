@@ -3,12 +3,17 @@ String.prototype.replaceAll = function (search, replacement) {
     return target.replace(new RegExp(search, 'g'), replacement);
 };
 
-
 function httpGet(theUrl) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", theUrl, false); // false for synchronous request
     xmlHttp.send(null);
     return xmlHttp.responseText;
+}
+
+function getZero(obj){
+	var o = JSON.parse(JSON.stringify(obj));
+	o.count = 0;
+	return o;
 }
 
 var getTeams = "getTeams";
@@ -17,6 +22,7 @@ var getPlayer = "getPlayer";
 var setPlayer = "setPlayer";
 var addPlayer = "addPlayer";
 var addTeam = "addTeam";
+var getPlayerReport = "getPlayerReport";
 
 var squadraPlayer = "";
 var numeroPlayer = "";
@@ -44,8 +50,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     'sap/m/Button',
     'sap/m/Dialog',
+    'sap/ui/model/json/JSONModel',
     'sap/m/Text'
-], function (Controller, Button, Dialog, Text) {
+], function (Controller, Button, Dialog, JSONModel, Text) {
     "use strict";
 
     return Controller.extend("BVS.controller.Player", {
@@ -69,6 +76,29 @@ sap.ui.define([
             	user = oQuery.username;
                 squadraPlayer = oQuery.squadra;
                 numeroPlayer = oQuery.numero;
+                var lol = getFromApi(getPlayerReport, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer});
+                console.log(lol);
+                var oModel_w;
+            	var chrono = [];
+            	var k = 0;
+            	// lol.single.forEach(function(e){
+            	// 	e.forEach(function (i){
+            	// 		chrono.push({
+            	// 			azione: i.azione,
+            	// 			incremental: k++,
+            	// 			opt: parseInt(i.qualita, 10)
+            	// 		});
+            	// 	})
+            	// 	// str += e[e.length - 1].puntinostri + " " + e[e.length - 1].puntiloro;
+            	// })
+					oModel_w = new JSONModel({
+						global: lol.byplayer[Object.keys(lol.byplayer)[0]],
+						chrono: chrono
+					}, true);
+					
+					oModel_w.setDefaultBindingMode(sap.ui.model.BindingMode.OneWay);
+					this.getView().setModel(oModel_w)
+					
                 if (numeroPlayer === "null") {
                 		this.getView().byId('profilePic').setSrc("./image/nopic.png");
 	                    this.getView().byId('nomecognomeField').setValue("");
@@ -113,7 +143,7 @@ sap.ui.define([
                         sap.ui.core.BusyIndicator.hide();
                     }, 0);
                 }
-
+			
             }
         },
 

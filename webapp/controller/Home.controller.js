@@ -1,6 +1,6 @@
-function refresh(){
+function refresh(team){
 	sap.ui.core.BusyIndicator.show(0);
-	var obj = {SQUADRA: curTeam};
+	var obj = {SQUADRA: team};
 	getFromApiAsync(getSavedMatches, function(data){
 	oModel.setProperty("/saved", data);
 	getFromApiAsync(getPlayers, function(dt){
@@ -90,9 +90,12 @@ var user = "";
 
 sap.ui.define([
 	"jquery.sap.global",
+	'sap/m/Button',
+	'sap/m/Dialog',
+	'sap/m/Text',
     "sap/ui/core/mvc/Controller",
     'sap/ui/model/json/JSONModel'
-], function (JQuery, Controller, JSONModel) {
+], function (JQuery, Button, Dialog, Text, Controller, JSONModel) {
     "use strict";
 
     return Controller.extend("BVS.controller.Home", {
@@ -135,32 +138,101 @@ sap.ui.define([
         },
 
         deleteMatch: function (e) {
-            getFromApi(deleteMatch, {
-		        ID: e.getParameter("listItem").mProperties.info.split(': ')[1]
+        	var idMatch = e.getParameter("listItem").mProperties.info.split(': ')[1];
+        	var dialog = new Dialog({
+				title: 'Conferma',
+				type: 'Message',
+				content: new Text({ text: 'Sei sicuro di voler eliminare la partita '+ e.getParameter("listItem").mProperties.title+ '?'}),
+				beginButton: new Button({
+					text: 'Conferma',
+					press: function () {
+						getFromApi(deleteMatch, {
+					        ID: idMatch
+						});
+						refresh(curTeam);
+						dialog.close();
+					}
+				}),
+				endButton: new Button({
+					text: 'Annulla',
+					press: function () {
+						dialog.close();
+					}
+				}),
+				afterClose: function() {
+					dialog.destroy();
+				}
 			});
-			refresh();
+
+			dialog.open();
         },
 		deleteTeam: function () {
-            getFromApi(deleteTeam, {
-		        SQUADRA: this.getView().byId("sqList").getSelectedKey()
+				var mthis = this;
+			    var dialog = new Dialog({
+				title: 'Conferma',
+				type: 'Message',
+				content: new Text({ text: 'Sei sicuro di voler eliminare la squadra '+ mthis.getView().byId("sqList").getSelectedKey() + '?'}),
+				beginButton: new Button({
+					text: 'Conferma',
+					press: function () {
+						getFromApi(deleteTeam, {
+					        SQUADRA: mthis.getView().byId("sqList").getSelectedKey()
+						});
+						var squadre = getFromApi(getTeams);
+						squadre.push({squadra: "+++ Aggiungi squadra +++"});
+					    oModel = new JSONModel({
+							saved: [],
+							players: [],
+							playersExport: [],
+							squadre: squadre
+						}, true);
+						mthis.getView().setModel(oModel);
+						refresh(squadre[0].squadra);
+						dialog.close();
+					}
+				}),
+				endButton: new Button({
+					text: 'Annulla',
+					press: function () {
+						dialog.close();
+					}
+				}),
+				afterClose: function() {
+					dialog.destroy();
+				}
 			});
-			var squadre = getFromApi(getTeams);
-			squadre.push({squadra: "+++ Aggiungi squadra +++"});
-		    oModel = new JSONModel({
-				saved: [],
-				players: [],
-				playersExport: [],
-				squadre: squadre
-			}, true);
-			this.getView().setModel(oModel);
-			refresh();
+
+			dialog.open();
         },
         deletePlayer: function (oEvent) {
-            getFromApi(deletePlayer, {
-		        NUMERO: oEvent.getParameter("listItem").mProperties.description,
-		        SQUADRA: curTeam
+        		var nP = oEvent.getParameter("listItem").mProperties.description;
+        	    var dialog = new Dialog({
+				title: 'Conferma',
+				type: 'Message',
+				content: new Text({ text: 'Sei sicuro di voler eliminare il giocatore '+ oEvent.getParameter("listItem").mProperties.title + ', Numero: ' + nP + '?'}),
+				beginButton: new Button({
+					text: 'Conferma',
+					press: function () {
+			            getFromApi(deletePlayer, {
+					        NUMERO: nP,
+					        SQUADRA: curTeam
+						});
+						refresh(curTeam);
+						dialog.close();
+					}
+				}),
+				endButton: new Button({
+					text: 'Annulla',
+					press: function () {
+						dialog.close();
+					}
+				}),
+				afterClose: function() {
+					dialog.destroy();
+				}
 			});
-			refresh();
+
+			dialog.open();
         },
         addPlayer: function(){
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
@@ -205,7 +277,8 @@ sap.ui.define([
 	            }, true);
 	            this.getView().setModel(oModel);
             	if(oQuery.refreshTeam === "true"){
-	            	refresh();
+            		//console.log("refresh");
+	            	refresh(curTeam);
             	}
             	if(oQuery.newTeam === "true"){
             		squadre = getFromApi(getTeams);
@@ -217,7 +290,7 @@ sap.ui.define([
 		            }, true);
 		            this.getView().setModel(oModel);
 		            this.getView().byId("sqList").setSelectedKey(oQuery.newTeamName);
-		            refresh();
+		            setTimeout(function(){refresh(oQuery.newTeamName);}, 800);
             	}
             }
         },
