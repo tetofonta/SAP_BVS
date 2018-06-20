@@ -5,6 +5,7 @@ function refresh(team){
 	oModel.setProperty("/saved", data);
 	getFromApiAsync(getPlayers, function(dt){
 	oModel.setProperty("/players", dt);
+	curPlayers = [];
 	oModel.getProperty("/players").forEach(function(e){
 		e.foto = e.foto.replaceAll(' ', '+');
 		curPlayers.push({
@@ -85,6 +86,7 @@ function getFromApiAsync(res, cb, prams) {
 var oModel = {};
 var curTeam = "";
 var curPlayers = [];
+var user = "";
 
 sap.ui.define([
 	"jquery.sap.global",
@@ -98,23 +100,11 @@ sap.ui.define([
 
     return Controller.extend("BVS.controller.Home", {
         onInit: function () {
-			var squadre = getFromApi(getTeams);
 			sap.ui.core.UIComponent.getRouterFor(this).getRoute("Home").attachMatched(this._onRouteMatched, this);
-			squadre.push({squadra: "+++ Aggiungi squadra +++"});
-            oModel = new JSONModel({
-                saved: [],
-                players: [],
-                playersExport: [],
-                squadre: squadre
-            }, true);
-            this.getView().setModel(oModel);
         },
 
         loadTeam: function (oEvent) {
         	
-            if (oEvent.getSource()._lastValue !== "+++ Aggiungi squadra +++") {
-            	//console.log(this.getView().byId("sqList").getSelectedKey());
-            	
             	sap.ui.core.BusyIndicator.show(0);
             	var obj = {SQUADRA: oEvent.getSource()._lastValue};
             	getFromApiAsync(getSavedMatches, function(data){
@@ -122,6 +112,7 @@ sap.ui.define([
             		
             		getFromApiAsync(getPlayers, function(dt){
             			oModel.setProperty("/players", dt);
+            			curPlayers = [];
 		                oModel.getProperty("/players").forEach(function(e){
 		                	e.foto = e.foto.replaceAll(' ', '+');
 		                	curPlayers.push({
@@ -134,16 +125,16 @@ sap.ui.define([
                         	sap.ui.core.BusyIndicator.hide();
             		}, obj);
             	}, obj);
-            	
-                
-            } else {
-                sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
+        },
+        
+        addTeam: function(){
+        	sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
         		query:{
 	        		numero: "null",
-	        		squadra: "null"
+	        		squadra: "null",
+	        		username: user
 	        	}
 	        	});
-            }
         },
 
         deleteMatch: function (e) {
@@ -247,7 +238,8 @@ sap.ui.define([
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
         		query:{
         			numero: "null",
-        			squadra: curTeam
+        			squadra: curTeam,
+        			username: user
         		}
         	});
         },
@@ -255,7 +247,8 @@ sap.ui.define([
         	sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
         		query:{
         			numero: e.getSource().mProperties.description,
-        			squadra: curTeam
+        			squadra: curTeam,
+        			username: user
         		}
         	});
 		},
@@ -263,7 +256,8 @@ sap.ui.define([
             sap.ui.core.UIComponent.getRouterFor(this).navTo("Game", {
 				query: {
 					squadra : curTeam,
-					giocatori: JSON.stringify(curPlayers)
+					giocatori: JSON.stringify(curPlayers),
+					username: user
 				}
 			});
         },
@@ -273,13 +267,21 @@ sap.ui.define([
             oArgs = oEvent.getParameter("arguments");
             oQuery = oArgs["?query"];
             if (oQuery){
+            	var squadre = getFromApi(getTeams, {username: oQuery.username});
+            	user = oQuery.username;
+	            oModel = new JSONModel({
+	                saved: [],
+	                players: [],
+	                playersExport: [],
+	                squadre: squadre
+	            }, true);
+	            this.getView().setModel(oModel);
             	if(oQuery.refreshTeam === "true"){
             		//console.log("refresh");
 	            	refresh(curTeam);
             	}
             	if(oQuery.newTeam === "true"){
-            		var squadre = getFromApi(getTeams);
-					squadre.push({squadra: "+++ Aggiungi squadra +++"});
+            		squadre = getFromApi(getTeams);
 		            oModel = new JSONModel({
 		                saved: [],
 		                players: [],

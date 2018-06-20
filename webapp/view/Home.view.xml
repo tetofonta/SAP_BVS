@@ -1,8 +1,7 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.Home"
-	xmlns:html="http://www.w3.org/1999/xhtml">
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout">
 			<Page title="{i18n>homeTitle}">
 				<content>
-					<VBox justifyContent="Center">
 						<HBox justifyContent="End">
 						<ComboBox id="sqList" change="loadTeam"
 							items="{
@@ -10,10 +9,18 @@
 							}">
 							<core:Item key="{squadra}" text="{squadra}" />
 						</ComboBox>
+						<Button icon="sap-icon://add" type="Accept" press="addTeam"></Button>
 						</HBox>
-						<HBox justifyContent="Center">
-							<VBox width="100%" class="darkbgmenodark">
-								<Title text="Giocatori"/>
+						
+							
+							<l:VerticalLayout id="containerLayout" width="100%" >
+								<l:BlockLayout id="BlockLayout" background="Default">
+									<l:BlockLayoutRow accentCells="Accent1">
+										<l:BlockLayoutCell
+												id="Accent1"
+												width="1"
+												title="Giocatori"><VBox width="100%" class="darkbgmenodark">
+								
 								<List
 									mode="Delete"
 									delete="deletePlayer"
@@ -28,8 +35,12 @@
 										icon="{foto}"/>
 								</List>
 							</VBox>
-							<VBox width="100%"  class="darkbg">
-								<Title text="Partite Giocate"/>
+										</l:BlockLayoutCell>
+										
+										<l:BlockLayoutCell
+												titleAlignment="End"
+												title="Partite disputate">
+<VBox width="100%"  class="darkbg">
 								<List
 									mode="Delete"
 									delete="deleteMatch"
@@ -43,9 +54,14 @@
 										info="Id: {id}"
 										press="getReport"/>
 								</List>
-							</VBox>
-						</HBox>
-					</VBox>
+							</VBox>										</l:BlockLayoutCell>
+									</l:BlockLayoutRow>
+
+								</l:BlockLayout>
+							</l:VerticalLayout>
+							
+							
+							
 				</content>
 				<footer>
 					<OverflowToolbar> 

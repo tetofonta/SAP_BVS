@@ -181,6 +181,7 @@ var dialogg;
 var buttonn;
 var labell;
 var textareaa;
+var user = "";
 
 function dwld() {
     $("#foo").append("<a id='ciao' href='data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentPartita, null, ' ')) +
@@ -233,7 +234,11 @@ function finePartita() {
         oVbox2.addItem(new buttonn({
             		text: "Torna indietro",
             		press: function(){
-            			sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home");
+            			sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home",{
+        		query:{
+        			username: user
+        		}
+        	});
 		        	}
             	}));
         mthis.ciaoDialog = new dialogg({
@@ -568,6 +573,7 @@ sap.ui.define([
             oArgs = oEvent.getParameter("arguments");
             oQuery = oArgs["?query"];
             if (oQuery) {
+            	user = oQuery.username;
                 oModel.setProperty("/changable", JSON.parse(oQuery.giocatori));
             	this.getView().byId("npp").setText(oQuery.squadra + " vs     ")
             	McurrentTeam = oQuery.squadra;

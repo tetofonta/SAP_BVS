@@ -10,10 +10,10 @@
 		</footer>
 		<HBox id="cosse">
 			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout eschifo" header="Battuta brutta"
-				subheader="" press="battutaBrutta">
+				subheader="" press="battutaSchifo">
 			</GenericTile>
 			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout emah" header="Battuta mediocre"
-				subheader="" press="battutaMedia">
+				subheader="" press="battutaMah">
 			</GenericTile>
 			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout ewow" header="Battuta Bella"
 				subheader="" press="battutaWow">
