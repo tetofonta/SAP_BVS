@@ -102,9 +102,6 @@ sap.ui.define([
 
         loadTeam: function (oEvent) {
         	
-            if (oEvent.getSource()._lastValue !== "+++ Aggiungi squadra +++") {
-            	//console.log(this.getView().byId("sqList").getSelectedKey());
-            	
             	sap.ui.core.BusyIndicator.show(0);
             	var obj = {SQUADRA: oEvent.getSource()._lastValue};
             	getFromApiAsync(getSavedMatches, function(data){
@@ -112,6 +109,7 @@ sap.ui.define([
             		
             		getFromApiAsync(getPlayers, function(dt){
             			oModel.setProperty("/players", dt);
+            			curPlayers = [];
 		                oModel.getProperty("/players").forEach(function(e){
 		                	e.foto = e.foto.replaceAll(' ', '+');
 		                	curPlayers.push({
@@ -124,17 +122,16 @@ sap.ui.define([
                         	sap.ui.core.BusyIndicator.hide();
             		}, obj);
             	}, obj);
-            	
-                
-            } else {
-                sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
+        },
+        
+        addTeam: function(){
+        	sap.ui.core.UIComponent.getRouterFor(this).navTo("Player", {
         		query:{
 	        		numero: "null",
 	        		squadra: "null",
 	        		username: user
 	        	}
 	        	});
-            }
         },
 
         deleteMatch: function (e) {
@@ -200,7 +197,6 @@ sap.ui.define([
             if (oQuery){
             	var squadre = getFromApi(getTeams, {username: oQuery.username});
             	user = oQuery.username;
-            	squadre.push({squadra: "+++ Aggiungi squadra +++"});
 	            oModel = new JSONModel({
 	                saved: [],
 	                players: [],
@@ -214,7 +210,6 @@ sap.ui.define([
             	}
             	if(oQuery.newTeam === "true"){
             		var squadre = getFromApi(getTeams);
-					squadre.push({squadra: "+++ Aggiungi squadra +++"});
 		            oModel = new JSONModel({
 		                saved: [],
 		                players: [],
