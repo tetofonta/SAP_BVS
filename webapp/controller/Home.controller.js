@@ -205,11 +205,10 @@ sap.ui.define([
 	            }, true);
 	            this.getView().setModel(oModel);
             	if(oQuery.refreshTeam === "true"){
-            		//console.log("refresh");
 	            	refresh();
             	}
             	if(oQuery.newTeam === "true"){
-            		var squadre = getFromApi(getTeams);
+            		squadre = getFromApi(getTeams);
 		            oModel = new JSONModel({
 		                saved: [],
 		                players: [],
