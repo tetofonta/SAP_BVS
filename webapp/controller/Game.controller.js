@@ -374,20 +374,40 @@ function pushSet() {
         punti: []
     };
 }
+var bottoni = [];
 
 function gira() {
-    var temp = getNumeroGiocatore($("#" + mthis.getView().createId("g1")).get()[0]);
-    for (var i = 1; i < 6; i++) {
-        var passivo = $("#" + mthis.getView().createId("g" + i)).get()[0];
-        var attivo = $("#" + mthis.getView().createId("g" + (i + 1))).get()[0];
-        passivo.childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML = getNumeroGiocatore(attivo);
-    }
-    $("#" + mthis.getView().createId("g6")).get()[0].childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML = temp;
-    var gaffu = bottoni[0].numero;
-    for (var i = 0; i < 5; i++) {
-        bottoni[i].numero = bottoni[i + 1].numero;
-    }
-    bottoni[5].numero = gaffu;
+	var showed = []
+	for(var q = 1; q <= 6; q++)
+		if(!bottoni[q - 1].hidden) showed.push({id: "g" + q, idx: q-1});
+	
+    var temp = getNumeroGiocatore($("#" + mthis.getView().createId(showed[0].id)).get()[0]);
+    // var old = bottoni[showed[0].idx].nome;
+    showed.forEach(function(e, i, a){
+    	if(i < showed.length - 1){
+    		var passivo = $("#" + mthis.getView().createId(e.id)).get()[0];
+	        var attivo = $("#" + mthis.getView().createId(a[i + 1].id)).get()[0];
+	        passivo.childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML = getNumeroGiocatore(attivo);
+	        bottoni[e.idx].numero = bottoni[a[i + 1].idx].numero
+    	}
+    });
+    $("#" + mthis.getView().createId(showed[showed.length - 1].id)).get()[0].childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML = temp;
+    bottoni[showed[showed.length - 1].idx].numero = temp;
+    // bottoni[showed[showed.length - 1].idx].nome = old;
+    
+    
+    
+    // for (var i = 1; i < 6; i++) {
+    //     var passivo = $("#" + mthis.getView().createId("g" + i)).get()[0];
+    //     var attivo = $("#" + mthis.getView().createId("g" + (i + 1))).get()[0];
+    //     passivo.childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML = getNumeroGiocatore(attivo);
+    // }
+    // $("#" + mthis.getView().createId("g6")).get()[0].childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML = temp;
+    // var gaffu = bottoni[0].numero;
+    // for (var i = 0; i < 5; i++) {
+    //     bottoni[i].numero = bottoni[i + 1].numero;
+    // }
+    // bottoni[5].numero = gaffu;
 }
 
 function cambia(a) {
@@ -406,7 +426,6 @@ function cambia(a) {
     currentSet.punti.push(clone(cambio));
 }
 
-var bottoni = [];
 
 function find(a) {
     var i;
@@ -420,9 +439,14 @@ function find(a) {
 }
 
 function disabilitaChiNonBatte() {
-    for (var k = 1; k <= 6; k++) {
+	var changed = false;
+    for (var k = 6; k >= 1; k--) {
         $("#" + mthis.getView().createId("g" + k)).draggable('disable');
-        if (k !== 6) $("#" + mthis.getView().createId("g" + k)).css('opacity', '.55');
+        console.log(bottoni)
+        if (!( !bottoni[k - 1].hidden && !changed )){
+        	$("#" + mthis.getView().createId("g" + k)).css('opacity', '.55');
+        	changed = true;
+        }
     }
 }
 
@@ -546,8 +570,15 @@ sap.ui.define([
                 this.getView().byId("g" + k).attachBrowserEvent("taphold", function (a) {
                     var i = find(a.target.innerHTML);
                     cambiando = bottoni[i].ref;
+                    
+                    var last = "g6";
+                    for(var q = 6; q >= 1; q--)
+                    	if(!bottoni[q-1].hidden){
+                    		last = "g" + q;
+                    		break;
+                    	}
 
-                    if (cambiando === foo.getView().byId("g6") && chiHaSegnato && isTheMatchStarted) isbatting = true;
+                    if (cambiando === foo.getView().byId(last) && chiHaSegnato && isTheMatchStarted) isbatting = true;
                     else isbatting = false;
 
                     cambiando_idx = i;
@@ -583,14 +614,14 @@ sap.ui.define([
         changePlayer: function (oEvent) {
             var changable = oModel.getProperty("/changable");
             var id = oEvent.getSource().sId;
-            var selected = id.substr(id.lastIndexOf("-") + 1, id.lenght);
+            var selected = id.substr(id.lastIndexOf("-") + 1, id.length);
             var btn = $("#" + cambiando.getId()).get()[0];
 
             var onum = btn.childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML;
             var onam = cambiando.nome ? cambiando.nome : "come cazzo lo posso sapere?";
             cambiando.numero = changable[selected].numero;
 		    btn.childNodes.item(0).childNodes.item(0).childNodes.item(0).innerHTML = changable[selected].numero;
-		    bottoni[cambiando_idx].numero = changable[selected].numero;
+		    bottoni[cambiando_idx].numero = cambiando.numero;
             
             cambiando.nome = changable[selected].nome;
             cambiando.numero = changable[selected].numero;
@@ -730,6 +761,11 @@ sap.ui.define([
 			        	
 			        	for (var k = 1; k <= 6; k++) {
 			                btn = mthis.getView().createId("g" + k);
+			                // console.log(mthis.getView().byId("g" + k).getText());
+			                if(getNumeroGiocatore(document.getElementById(btn)).startsWith("P")){
+			                	mthis.getView().byId("g" + k).setVisible(false);
+			                	bottoni[k - 1].hidden = true;
+			                } else bottoni[k - 1].hidden = false;
 					    	$("#" + btn).draggable({
 					                cancel: true,
 					                revert: true,
