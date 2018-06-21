@@ -33,6 +33,9 @@ sap.ui.define([
                     "</p>"
                 });
                 this.getView().setModel(oModel);
-            }
+            },
+            onNavBack: function () {
+            	sap.ui.core.UIComponent.getRouterFor(this).navTo("Login");
+        	}
         });
     });

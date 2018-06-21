@@ -1,6 +1,6 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.About"
           xmlns:html="http://www.w3.org/1999/xhtml">
-    <Page title="About Better Volley Scouting">
+    <Page title="About Better Volley Scouting" showNavButton="true" navButtonPress="onNavBack">
         <content>
             <VBox fitContainer="true" justifyContent="Center" alignItems="Center" alignContent="Center">
                 <FormattedText htmlText="{/HTML}"/>
