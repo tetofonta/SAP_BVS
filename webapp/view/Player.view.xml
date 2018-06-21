@@ -21,7 +21,7 @@
 								<Label text="Nome e Cognome" labelFor="nomecognomeField"/>
 								<Input id="nomecognomeField" required="true"/>
 								<Label text="Numero giocatore" labelFor="numeroField"/>
-								<Input id="numeroField" required="true"/>
+								<Input id="numeroField" required="true" type="Number"/>
 								<Label text="Data di nascita" labelFor="datanascitaField"/>
 								<DatePicker id="datanascitaField" valueFormat="yyyy-MM-dd"/>
 							</VBox>

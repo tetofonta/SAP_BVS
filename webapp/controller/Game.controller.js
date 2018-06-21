@@ -215,7 +215,7 @@ function gooriep() {
     riepilogoPage.setContent(generaTabellaRiepilogo());
     mthis.riepDialog.open();
 
-    console.log(mthis.getView())
+    //console.log(mthis.getView())
     mthis.getView()._xContent.innerHTML = "<mvc:View xmlns:core=\"sap.ui.core\" xmlns:mvc=\"sap.ui.core.mvc\" xmlns=\"sap.m\" controllerName=\"ProvaVolley.controller.Riepilogo\" xmlns:html=\"http://www.w3.org/1999/xhtml\"> <App><pages><Page title=\"Title\"><content></content></Page></pages></App></mvc:View>";
 }
 
@@ -430,8 +430,8 @@ function cambia(a) {
 function find(a) {
     var i;
     for (i = 0; i < 6; i++) {
-    	console.log(a);
-    	console.log(bottoni[i].numero)
+    	//console.log(a);
+    	//console.log(bottoni[i].numero)
         if (bottoni[i].numero === a)
             break;
     }
@@ -727,9 +727,9 @@ sap.ui.define([
 	        	oVbox1.setJustifyContent('Center');
 	        	oVbox1.setAlignItems('Center');
 	        	oVbox1.addItem(new Label({text: 'Punti per set: '}));
-				oVbox1.addItem(new Input(mthis.getView().createId('setInput')));
+				oVbox1.addItem(new Input(mthis.getView().createId('setInput'), {type: 'Number'}));
 				oVbox1.addItem(new Label({text: 'Alla meglio dei: '}));
-				oVbox1.addItem(new Input(mthis.getView().createId('meglioDeiInput')));
+				oVbox1.addItem(new Input(mthis.getView().createId('meglioDeiInput'), {type: 'Number'}));
 				var dialog = new Dialog({
 				title: 'Impostazioni partita',
 				type: 'Message',
@@ -739,6 +739,7 @@ sap.ui.define([
 					press: function () {
 						isTheMatchStarted = true;
 						//console.log(mthis.getView().byId('setInput').getValue());
+						mthis.getView().byId('avversari').setEnabled(false);
 						topSet=mthis.getView().byId('setInput').getValue();
 						betterThan=mthis.getView().byId('meglioDeiInput').getValue();
 						var rest = "";

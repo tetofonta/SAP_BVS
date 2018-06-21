@@ -40,7 +40,7 @@ function getFromApi(res, prams) {
         });
         res += "foo=foo";
     }
-    console.log(res);
+    //console.log(res);
     return JSON.parse(httpGet((apiHost + res).replace(" ", "%20")));
 }
 
@@ -51,8 +51,9 @@ sap.ui.define([
     'sap/m/Button',
     'sap/m/Dialog',
     'sap/ui/model/json/JSONModel',
-    'sap/m/Text'
-], function (Controller, Button, Dialog, JSONModel, Text) {
+    'sap/m/Text',
+    'sap/m/MessageToast'
+], function (Controller, Button, Dialog, JSONModel, Text, MessageToast) {
     "use strict";
 
     return Controller.extend("BVS.controller.Player", {
@@ -77,7 +78,7 @@ sap.ui.define([
                 squadraPlayer = oQuery.squadra;
                 numeroPlayer = oQuery.numero;
                 var lol = getFromApi(getPlayerReport, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer});
-                console.log(lol);
+                //console.log(lol);
                 var oModel_w;
             	var chrono = [];
             	var k = 0;
@@ -97,10 +98,10 @@ sap.ui.define([
 					}, true);
 					
 					oModel_w.setDefaultBindingMode(sap.ui.model.BindingMode.OneWay);
-					this.getView().setModel(oModel_w)
-					
+					this.getView().setModel(oModel_w);
+				//this.getView().byId('profilePic').setSrc('https://i.imgur.com/oUsxIhd.png');
                 if (numeroPlayer === "null") {
-                		this.getView().byId('profilePic').setSrc("./image/nopic.png");
+                		this.getView().byId('profilePic').setSrc("https://i.imgur.com/oUsxIhd.png");
 	                    this.getView().byId('nomecognomeField').setValue("");
 	                    this.getView().byId('numeroField').setValue("");
 	                    this.getView().byId('datanascitaField').setValue("");
@@ -121,13 +122,12 @@ sap.ui.define([
                     this.getView().byId("multiBtn").setText("Modifica giocatore");
                     this.getView().byId("multiBtn").setIcon("sap-icon://edit");
                     var mthis = this;
-
                     setTimeout(function () {
                     	mthis.getView().byId('squadraField').setValue(squadraPlayer);
                         mthis.getView().byId('profilePic').setSrc(getFromApi(getPlayer, {
                             NUMERO: numeroPlayer,
                             SQUADRA: squadraPlayer
-                        })[0].foto.replaceAll(' ', '+'));
+                        })[0].foto);
                         mthis.getView().byId('nomecognomeField').setValue(getFromApi(getPlayer, {
                             NUMERO: numeroPlayer,
                             SQUADRA: squadraPlayer
@@ -165,110 +165,110 @@ sap.ui.define([
         onAfterRendering: function () {
             var loadFile = this.getView().createId("inFile");
             $('#' + loadFile).append('<input id="myfile" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />');
+        	
         },
         onNavBack: function () {
-            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
-        		query:{
-        			username: user
-        		}
-        	});
+            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");
         },
 
         multiBtn: function () {
-            //console.log($('#__component0---player--profilePic')[0].src);
-            //console.log(resizeImg($('#__component0---player--profilePic')[0].src, 10, 10, 0));
-            if (numeroPlayer === "null") {
-            	if(squadraPlayer === "null"){ //AGGIUNGI SQUADRA
-            		var addableTeam = getFromApi(addTeam, {
-	                    NOME: this.getView().byId('nomecognomeField').getValue(),
-	                    NUMERO: this.getView().byId('numeroField').getValue(),
-	                    SQUADRA: this.getView().byId('squadraField').getValue(),
-	                    //FOTO: $('#__component0---player--profilePic')[0].src,
-	                    FOTO: "aaa",
-	                    DATANASCITA: this.getView().byId('datanascitaField').getValue()
-	                });
-	                if (!addableTeam) {
-	                    var dialog = new Dialog({
-	                        title: 'Errore',
-	                        type: 'Message',
-	                        state: 'Error',
-	                        content: new Text({
-	                            text: 'Esiste già una squadra con lo stesso nome.'
-	                        }),
-	                        beginButton: new Button({
-	                            text: 'OK',
-	                            press: function () {
-	                                dialog.close();
-	                            }
-	                        }),
-	                        afterClose: function () {
-	                            dialog.destroy();
-	                        }
-	                    });
-	                    dialog.open();
-	                }else {
-	                    sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
-	                        query: {
-	                            newTeam: true,
-	                            newTeamName: this.getView().byId('squadraField').getValue(),
-	                            username: user
-	                        }
-	                    });
-	                }
-            	}else{//NEW PLAYER
-	                var addablePlayer = getFromApi(addPlayer, {
-	                    NOME: this.getView().byId('nomecognomeField').getValue(),
-	                    NUMERO: this.getView().byId('numeroField').getValue(),
-	                    SQUADRA: squadraPlayer,
-	                    //FOTO: $('#__component0---player--profilePic')[0].src,
-	                    FOTO: "aaa",
-	                    DATANASCITA: this.getView().byId('datanascitaField').getValue()
-	                });
-	                if (!addablePlayer) {
-	                    var dialog = new Dialog({
-	                        title: 'Errore',
-	                        type: 'Message',
-	                        state: 'Error',
-	                        content: new Text({
-	                            text: 'Il numero del giocatore è già presente in questa rosa.'
-	                        }),
-	                        beginButton: new Button({
-	                            text: 'OK',
-	                            press: function () {
-	                                dialog.close();
-	                            }
-	                        }),
-	                        afterClose: function () {
-	                            dialog.destroy();
-	                        }
-	                    });
-	                    dialog.open();
-	                } else {
-	                    sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
-	                        query: {
-	                            refreshTeam: true,
-	                            username: user
-	                        }
-	                    });
-	                }
-            	}
-            } else { //EDIT
-                getFromApi(setPlayer, {
-                    NOME: this.getView().byId('nomecognomeField').getValue(),
-                    NUMERO: this.getView().byId('numeroField').getValue(),
-                    NUMEROVECCHIO: numeroPlayer,
-                    SQUADRA: squadraPlayer,
-                    //FOTO: $('#__component0---player--profilePic')[0].src,
-                    FOTO: "aaa",
-                    DATANASCITA: this.getView().byId('datanascitaField').getValue()
-                });
-                sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
-                    query: {
-                        refreshTeam: true,
-                        username: user
-                    }
-                });
-            }
+			if(this.getView().byId('numeroField').getValue().length>2){
+				MessageToast.show("Il numero del giocatore supera le due cifre.");
+			}else{
+				if($('#__component0---player--profilePic')[0].src.includes('loading.gif')){
+					MessageToast.show("Sto ancora caricando la foto. Attendere.");
+				}else{
+	            if (numeroPlayer === "null") {
+	            	if(squadraPlayer === "null"){ //AGGIUNGI SQUADRA
+	            		var addableTeam = getFromApi(addTeam, {
+		                    NOME: this.getView().byId('nomecognomeField').getValue(),
+		                    NUMERO: this.getView().byId('numeroField').getValue(),
+		                    SQUADRA: this.getView().byId('squadraField').getValue(),
+		                    FOTO: $('#__component0---player--profilePic')[0].src,
+		                    DATANASCITA: this.getView().byId('datanascitaField').getValue()
+		                });
+		                if (!addableTeam) {
+		                    var dialog = new Dialog({
+		                        title: 'Errore',
+		                        type: 'Message',
+		                        state: 'Error',
+		                        content: new Text({
+		                            text: 'Esiste già una squadra con lo stesso nome.'
+		                        }),
+		                        beginButton: new Button({
+		                            text: 'OK',
+		                            press: function () {
+		                                dialog.close();
+		                            }
+		                        }),
+		                        afterClose: function () {
+		                            dialog.destroy();
+		                        }
+		                    });
+		                    dialog.open();
+		                }else {
+		                    sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
+		                        query: {
+		                            newTeam: true,
+		                            newTeamName: this.getView().byId('squadraField').getValue(),
+		                            username: user
+		                        }
+		                    });
+		                }
+	            	}else{//NEW PLAYER
+		                var addablePlayer = getFromApi(addPlayer, {
+		                    NOME: this.getView().byId('nomecognomeField').getValue(),
+		                    NUMERO: this.getView().byId('numeroField').getValue(),
+		                    SQUADRA: squadraPlayer,
+		                    FOTO: $('#__component0---player--profilePic')[0].src,
+		                    DATANASCITA: this.getView().byId('datanascitaField').getValue()
+		                });
+		                if (!addablePlayer) {
+		                    var dialog = new Dialog({
+		                        title: 'Errore',
+		                        type: 'Message',
+		                        state: 'Error',
+		                        content: new Text({
+		                            text: 'Il numero del giocatore è già presente in questa rosa.'
+		                        }),
+		                        beginButton: new Button({
+		                            text: 'OK',
+		                            press: function () {
+		                                dialog.close();
+		                            }
+		                        }),
+		                        afterClose: function () {
+		                            dialog.destroy();
+		                        }
+		                    });
+		                    dialog.open();
+		                } else {
+		                    sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
+		                        query: {
+		                            refreshTeam: true,
+		                            username: user
+		                        }
+		                    });
+		                }
+	            	}
+	            } else {//EDIT
+	            		getFromApi(setPlayer, {
+		                    NOME: this.getView().byId('nomecognomeField').getValue(),
+		                    NUMERO: this.getView().byId('numeroField').getValue(),
+		                    NUMEROVECCHIO: numeroPlayer,
+		                    SQUADRA: squadraPlayer,
+		                    FOTO: $('#__component0---player--profilePic')[0].src,
+		                    DATANASCITA: this.getView().byId('datanascitaField').getValue()
+		                });
+		                sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
+		                    query: {
+		                        refreshTeam: true,
+		                        username: user
+		                    }
+		                });
+	            }
+				}
+			}
         }
 
 
