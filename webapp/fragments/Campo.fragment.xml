@@ -30,9 +30,9 @@
 								<items>
 									<HBox class="qwerty campodagioco" id="__hbox1" alignContent="Center" alignItems="Center" justifyContent="Center">
 										<items>
-											<Button text="P1" width="100px" id="g3" class="tondo"/>
+											<Button text="P3" width="100px" id="g3" class="tondo"/>
 											<Button text="P2" width="100px" id="g2" class="tondo"/>
-											<Button text="P3" width="100px" id="g1" class="tondo"/>
+											<Button text="P1" width="100px" id="g1" class="tondo"/>
 										</items>
 									</HBox>
 									<HBox xmlns="sap.m" class="qwerty campodagioco" id="__hbox0" alignItems="Center" alignContent="Center" justifyContent="Center">
