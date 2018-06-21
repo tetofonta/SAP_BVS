@@ -36,7 +36,7 @@ function getFromApi(res, prams) {
         });
         res += "foo=foo";
     }
-    console.log(httpGet((apiHost + res).replace(" ", "%20")));
+    //console.log(httpGet((apiHost + res).replace(" ", "%20")));
     return JSON.parse(httpGet((apiHost + res).replace(" ", "%20")));
 }
 

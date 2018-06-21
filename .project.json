@@ -45,11 +45,11 @@
     "targetFolder": "dist",
     "excludedFolders": [],
     "excludedFiles": [],
-    "lastBuildDateTime": "Wed, 20 Jun 2018 12:34:49 GMT"
+    "lastBuildDateTime": "Thu, 21 Jun 2018 10:16:44 GMT"
   },
   "hcpdeploy": {
     "account": "p2000126460trial",
     "name": "sapappbvs",
-    "lastVersionWeTriedToDeploy": "2.0.1"
+    "lastVersionWeTriedToDeploy": "2.0.4"
   }
 }

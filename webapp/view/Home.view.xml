@@ -9,7 +9,7 @@
 							}">
 							<core:Item key="{squadra}" text="{squadra}" />
 						</ComboBox>
-						<Button icon="sap-icon://add" type="Accept" press="addTeam"></Button>
+						<Button icon="sap-icon://add" type="Accept" press="addTeam" class="sapUiSmallMarginEnd"></Button>
 						</HBox>
 						
 							
