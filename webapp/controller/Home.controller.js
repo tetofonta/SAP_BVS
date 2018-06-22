@@ -14,6 +14,7 @@ function refresh(team) {
                 });
             });
             curTeam = obj.SQUADRA;
+            $('.showButtons').css('opacity', '1.0', 'important');
             sap.ui.core.BusyIndicator.hide();
         }, obj);
     }, obj);

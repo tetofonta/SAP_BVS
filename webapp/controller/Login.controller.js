@@ -110,7 +110,13 @@ sap.ui.define([
         			username: user,
         		}
         	});
-            else this.getView().byId("enterBtn").setText("Hai sbagliato");
+            else{
+                this.getView().byId("enterBtn").setText("Hai sbagliato");
+                var btn = this.getView().byId("enterBtn");
+                setTimeout(function(){
+                    btn.setText("Login");
+                }, 1250);
+            }   
         },
 
         openAbout: function () {

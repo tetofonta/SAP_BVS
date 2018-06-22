@@ -7,9 +7,15 @@
                     <Image src="./image/Logo.jpeg"/>
                     <Input id="username" placeholder="Username" value="admin"></Input>
                     <Input id="password" placeholder="Password" type="Password" value="admin"></Input>
-                    <Button width="192px" text="Entra" type="Emphasized" press="doLogin"></Button>
+                    <Button width="192px" id="enterBtn" text="Entra" type="Emphasized" press="doLogin"></Button>
+                	
                 </items>
             </VBox>
+            <HBox justifyContent="End" alignContent="End">
+                		<items>
+                			<Image src="http://bettervolleyscouting.altervista.org/download.png"/>
+                		</items>
+                	</HBox>
         </content>
         <footer>
             <OverflowToolbar>

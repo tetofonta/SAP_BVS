@@ -74,6 +74,9 @@ sap.ui.define([
             oArgs = oEvent.getParameter("arguments");
             oQuery = oArgs["?query"];
             if (oQuery) {
+            	setTimeout(function(){
+            	$('#__component0---player--profilePic')[0].src = "https://i.imgur.com/oUsxIhd.png";
+            }, 0);
                 user = oQuery.username;
                 squadraPlayer = oQuery.squadra;
                 numeroPlayer = oQuery.numero;
@@ -165,7 +168,6 @@ sap.ui.define([
         onAfterRendering: function () {
             var loadFile = this.getView().createId("inFile");
             $('#' + loadFile).append('<input id="myfile" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />');
-
         },
         onNavBack: function () {
             sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");
