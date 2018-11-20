@@ -262,6 +262,16 @@ sap.ui.define([
                 }
             });
         },
+        
+        newMatchSpoken: function () {
+            sap.ui.core.UIComponent.getRouterFor(this).navTo("GameSpeech", {
+                query: {
+                    squadra: curTeam,
+                    giocatori: JSON.stringify(curPlayers),
+                    username: user
+                }
+            });
+        },
 
         _onRouteMatched: function (oEvent) {
             var oArgs, oQuery;

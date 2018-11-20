@@ -73,7 +73,6 @@ var mioPunteggio = 0;
 var suoPunteggio = 0;
 var currentAzione = null;
 var beep = new Audio("beep.ogg");
-var overSound = new Audio("over.ogg");
 var mistannospostando = false;
 var chiParte = true;
 //True: partiamo noi, False: partono loro

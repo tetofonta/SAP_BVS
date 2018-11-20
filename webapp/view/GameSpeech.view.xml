@@ -1,0 +1,15 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.GameSpeech"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page title="GameSpeech">
+				<content>
+					
+				</content>
+				<footer>
+					<core:Fragment fragmentName="BVS.fragments.CampoFooter" type="XML"></core:Fragment>
+				</footer>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

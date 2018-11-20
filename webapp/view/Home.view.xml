@@ -68,6 +68,7 @@
 						<Button id="as" press="addPlayer" type="Accept" class="showButtons" icon="sap-icon://add" text="Nuovo Giocatore"/>
 						<ToolbarSpacer/>
 						<Button id="newMatch" press="newMatch" type="Accept" class="showButtons" icon="sap-icon://begin" text="Nuova partita"/>
+						<Button id="newMatchSpoken" press="newMatchSpoken" type="Accept" class="showButtons" icon="sap-icon://microphone" text="Nuova partita con comandi vocali"/>
 						<Button id="deleteTeam" press="deleteTeam" type="Reject" class="showButtons" icon="sap-icon://delete" text="Elimina squadra"/>
 					</OverflowToolbar>
 				</footer>
