@@ -10,7 +10,7 @@ function httpGetAsync(theUrl, callback) {
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText);
-    }
+    };
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 }
@@ -18,7 +18,6 @@ function httpGetAsync(theUrl, callback) {
 var getTeams = "getTeams";
 var getSavedMatches = "getSavedMatches";
 var getPlayers = "getPlayers";
-
 
 var apiHost = "https://cors.io/?http://bettervolleyscouting.altervista.org";
 
@@ -63,6 +62,7 @@ var dictionary = []
 dictionary = dictionary.concat(command[1], command[2])
 
 var topSet, betterThan, user, giocatori, squadra, mioPunteggio = 0, suoPunteggio = 0, mieiSet = 0, suoiset = 0;
+var lastMioPunteggio = 0, lastSuoPunteggio = 0, lastMieiSet = 0, lastSuoiset = 0, undoable = 0;
 var fineSetSound = new Audio("audio/fineSet.ogg");
 var overSound = new Audio("audio/over.ogg");
 var addPuntoSound = new Audio("audio/addPunto.ogg");
@@ -81,7 +81,6 @@ var azioneArray = {
 	azione: null,
 	qualita: null
 }
-
 var currentPunto = {
 	azione: []
 };
@@ -89,6 +88,45 @@ var currentSet = {
 	punti: []
 }
 var currentPartita = []
+var lastAzioneArray = {
+	giocatore: null,
+	azione: null,
+	qualita: null
+}
+var lastCurrentPunto = {
+	azione: []
+};
+var lastCurrentSet = {
+	punti: []
+}
+var lastCurrentPartita = []
+
+function undo(){
+	if(undoable < 1) return false;
+	mieiSet = lastMieiSet;
+	mioPunteggio = lastMioPunteggio;
+    suoiset = lastSuoiset;
+    suoPunteggio = lastSuoPunteggio;
+    azioneArray = lastAzioneArray;
+    currentPartita = lastCurrentPartita;
+    currentPunto = lastCurrentPunto;
+    currentSet = lastCurrentSet;
+    undoable--;
+    return true;
+}
+
+function save(){
+	lastMieiSet = mieiSet;
+	lastMioPunteggio = mioPunteggio;
+    lastSuoiset = suoiset;
+    lastSuoPunteggio = suoPunteggio;
+    lastAzioneArray = azioneArray;
+    lastCurrentPartita = currentPartita;
+    lastCurrentPunto = currentPunto;
+    lastCurrentSet = currentSet;
+    undoable++;
+    return true;
+}
 
 function clone(obj) {
     if (null == obj || "object" != typeof obj)
@@ -100,7 +138,6 @@ function clone(obj) {
     }
     return copy;
 }
-
 
 function finePartita() {
     //console.log(currentPartita);
@@ -172,6 +209,7 @@ function finePartita() {
     }, 0);
 
 }
+
 function pushAzione(azione, giocatore, qualita) {
     switch (qualita) {
         case 1:
@@ -204,6 +242,63 @@ function pushSet() {
     currentSet = {
         punti: []
     };
+}
+
+function addPuntoMioFnc(cl){
+	addPuntoSound.play();
+            mioPunteggio++;
+            
+            cl.getView().byId("mieipunti").setText(mioPunteggio);
+            pushPunto(mioPunteggio, suoPunteggio);
+            if (mioPunteggio >= topSet && mioPunteggio - suoPunteggio >= 2) {
+                pushSet();
+                fineSetSound.play();
+                mioPunteggio = 0;
+                suoPunteggio = 0;
+                cl.getView().byId("mieipunti").setText(mioPunteggio);
+                cl.getView().byId("tuoipunti").setText(suoPunteggio);
+                mieiSet++;
+                var sets = "";
+                var rest = "";
+                for (var i = 0; i < mieiSet; i++)
+                    sets += "\u2588 ";
+                for (var i = betterThan; i > mieiSet; i--)
+                    rest += "\u2588 ";
+                cl.getView().byId("mieisetvinti").setText(sets);
+                cl.getView().byId("mieisetmancanti").setText(rest);
+                if (mieiSet > betterThan / 2) {
+                    finePartita();
+                }
+            }
+            save();
+}
+
+function addPuntoSuoFnc(cl){
+	addPuntoSound.play();
+            suoPunteggio++;
+            cl.getView().byId("tuoipunti").setText(suoPunteggio);
+            pushPunto(mioPunteggio, suoPunteggio);
+            if (suoPunteggio >= topSet && suoPunteggio - mioPunteggio >= 2) {
+                pushSet();
+                fineSetSound.play();
+                mioPunteggio = 0;
+                suoPunteggio = 0;
+                cl.getView().byId("mieipunti").setText(mioPunteggio);
+                cl.getView().byId("tuoipunti").setText(suoPunteggio);
+                suoiset++;
+                var sets = "";
+                var rest = "";
+                for (var i = 0; i < suoiset; i++)
+                    sets += "\u2588 ";
+                for (var i = betterThan; i > suoiset; i--)
+                    rest += "\u2588 ";
+                cl.getView().byId("suoisetvinti").setText(sets);
+                cl.getView().byId("suoisetmancanti").setText(rest);
+                if (suoiset > betterThan / 2) {
+                    finePartita();
+                }
+            }
+            save();
 }
 
 function mostSuitable(dict, parola) {
@@ -266,8 +361,16 @@ function validate(str) {
     return ok;
 }
 
+
+
 function parse(arr) {
-    //TODO: Non sappiamo ancora gli id :D
+    if(arr.length === 3){
+    	save();
+    	pushAzione(arr[1], arr[0], arr[2] === "brutto" ? 1 : (arr[2] === "bello" ? 2 : 3) );
+    }else if (arr.length === 2){
+    	if(arr[1] === 'suo') addPuntoSuoFnc(mthis);
+    	else addPuntoMioFnc(mthis);
+    }
     return arr;
 }
 
@@ -306,29 +409,31 @@ document.body.onmousedown = function(){
     recognition.onresult = function (event) {
         var last = sanitize(event.results[event.results.length - 1][0].transcript);
         last = last.toLowerCase().split(" ");
-        // if (last[0] !== "numero") {
-        //     speak("ripeti")
-        //     return;
-        // }
-        last = last.map(function(e, i){
-            if (i > 0) {
-                var ms = mostSuitable(dictionary, e);
-                if (ms === "ornetti") {
-                    document.body.style.backgroundImage = 'url("./download.png")'
-                    setTimeout(function(){document.body.style.backgroundImage = ''}, 100);
-                    return "";
-                }
-                return ms;
-            }
-            return e
-        }).join(" ").replace("  ", " ");
-        console.log(last)
-        if (!validate(last)) speak("ripeti")
-        else {
-        	var aaa =  parse(last.split(" "));
-			pushAzione(aaa[1], aaa[0], aaa[2] === "brutto" ? 1 : (aaa[2] === "bello" ? 2 : 3) );        
+        if (last[0] === "punto") {
+            parse([last[0], mostSuitable(command[0], last[1])]);
+            return;
+        } else if (last[0] === "annulla"){
+        	if(!undo()) speak("impossibile annullare")
+        } else {
+	        last = last.map(function(e, i){
+	            if (i > 0) {
+	                var ms = mostSuitable(dictionary, e);
+	                if (ms === "ornetti") {
+	                    document.body.style.backgroundImage = 'url("./download.png")'
+	                    setTimeout(function(){document.body.style.backgroundImage = ''}, 100);
+	                    return "";
+	                }
+	                return ms;
+	            }
+	            return e
+	        }).join(" ").replace("  ", " ");
+	        console.log(last)
+	        if (!validate(last)) speak("ripeti")
+	        else {
+	        	parse(last.split(" "));
+	        }
+	        recognition.stop();
         }
-        recognition.stop();
     };
     lastThread = recognition;
     recognition.start();
@@ -464,31 +569,7 @@ sap.ui.define([
         },
         
         addPuntoMio: function () {
-            addPuntoSound.play();
-            mioPunteggio++;
-            
-            this.getView().byId("mieipunti").setText(mioPunteggio);
-            pushPunto(mioPunteggio, suoPunteggio);
-            if (mioPunteggio >= topSet && mioPunteggio - suoPunteggio >= 2) {
-                pushSet();
-                fineSetSound.play();
-                mioPunteggio = 0;
-                suoPunteggio = 0;
-                this.getView().byId("mieipunti").setText(mioPunteggio);
-                this.getView().byId("tuoipunti").setText(suoPunteggio);
-                mieiSet++;
-                var sets = "";
-                var rest = "";
-                for (var i = 0; i < mieiSet; i++)
-                    sets += "\u2588 ";
-                for (var i = betterThan; i > mieiSet; i--)
-                    rest += "\u2588 ";
-                this.getView().byId("mieisetvinti").setText(sets);
-                this.getView().byId("mieisetmancanti").setText(rest);
-                if (mieiSet > betterThan / 2) {
-                    finePartita();
-                }
-            }
+            addPuntoMioFnc(this);
         },
         subPuntoMio: function () {
             if (mioPunteggio > 0) {
@@ -500,30 +581,7 @@ sap.ui.define([
             }
         },
         addPuntoSuo: function () {
-            addPuntoSound.play();
-            suoPunteggio++;
-            this.getView().byId("tuoipunti").setText(suoPunteggio);
-            pushPunto(mioPunteggio, suoPunteggio);
-            if (suoPunteggio >= topSet && suoPunteggio - mioPunteggio >= 2) {
-                pushSet();
-                fineSetSound.play();
-                mioPunteggio = 0;
-                suoPunteggio = 0;
-                this.getView().byId("mieipunti").setText(mioPunteggio);
-                this.getView().byId("tuoipunti").setText(suoPunteggio);
-                suoiset++;
-                var sets = "";
-                var rest = "";
-                for (var i = 0; i < suoiset; i++)
-                    sets += "\u2588 ";
-                for (var i = betterThan; i > suoiset; i--)
-                    rest += "\u2588 ";
-                this.getView().byId("suoisetvinti").setText(sets);
-                this.getView().byId("suoisetmancanti").setText(rest);
-                if (suoiset > betterThan / 2) {
-                    finePartita();
-                }
-            }
+            addPuntoSuoFnc(this);
         },
         subPuntoSuo: function () {
             if (suoPunteggio > 0) {
