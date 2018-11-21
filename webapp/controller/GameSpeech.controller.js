@@ -439,7 +439,7 @@ function sanitize(str){
 var lastThread = null;
 var history2 = [];
 var counter = 0;
-document.body.onmousedown = function(){
+document.body.addEventListener("touchstart", function(){
     var recognition = new SpeechRecognition();
     var speechRecognitionList = new SpeechGrammarList();
     speechRecognitionList.addFromString(grammar, 1.0);
@@ -481,12 +481,12 @@ document.body.onmousedown = function(){
     lastThread = recognition;
     recognition.start();
     document.body.style.backgroundColor = 'red';
-};
-document.body.onmouseup = function() {
+}, false);
+document.body.addEventListener("touchend", function() {
 	setTimeout(function(){
     lastThread.stop();
     document.body.style.backgroundColor = 'black';
-}, 250);}
+}, 250);}, false);
 
 sap.ui.define([
 	"jquery.sap.global",

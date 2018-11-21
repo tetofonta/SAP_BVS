@@ -101,8 +101,8 @@ sap.ui.define([
 
     return Controller.extend("BVS.controller.Home", {
         onInit: function () {
-        	document.body.onmousedown = undefined;
-        	document.body.onmouseup = undefined;
+        	document.body.addEventListener("touchstart", function() {}, false);
+        	document.body.addEventListener("touchend", function() {}, false);
             sap.ui.core.UIComponent.getRouterFor(this).getRoute("Home").attachMatched(this._onRouteMatched, this);
         },
 
