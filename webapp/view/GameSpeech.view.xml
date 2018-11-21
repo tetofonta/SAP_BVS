@@ -3,25 +3,25 @@
 		<pages>
 			<Page showNavButton="true" navButtonPress="onNavBack" title="GameSpeech">
 				<content>
-
-						<l:VerticalLayout id="containerLayout" width="100%" >
-		<l:BlockLayout id="BlockLayout" background="{/selectedBackground}">
-			<l:BlockLayoutRow accentCells="Accent1" scrollable="true">
-				<l:BlockLayoutCell>
-					<ScrollContainer
-		height="70vh"
-		width="auto"
-		horizontal="true"
-		vertical="true">
-		<core:HTML id="htmlView"/>
-	</ScrollContainer>
-				</l:BlockLayoutCell>
-				<l:BlockLayoutCell>
-					<Button type="Reject" class="pushToTalkButton" icon="sap-icon://microphone" text="Push to talk" id="pushToTalkButton"/>
-				</l:BlockLayoutCell>
-			</l:BlockLayoutRow>
-		</l:BlockLayout>
-		</l:VerticalLayout>
+					<l:VerticalLayout id="containerLayout" width="100%" enabled='false'>
+						<l:BlockLayout id="BlockLayout" background="{/selectedBackground}">
+							<l:BlockLayoutRow accentCells="Accent1" scrollable="true">
+								<l:BlockLayoutCell>
+									<ScrollContainer
+										height="70vh"
+										width="auto"
+										horizontal="true"
+										vertical="true">
+										<core:HTML id="htmlView"/>
+									</ScrollContainer>
+								</l:BlockLayoutCell>
+								
+								<l:BlockLayoutCell>
+									<Button type="Reject" class="pushToTalkButton" icon="sap-icon://microphone" text="Push to talk" id="pushToTalkButton"/>
+								</l:BlockLayoutCell>
+							</l:BlockLayoutRow>
+						</l:BlockLayout>
+					</l:VerticalLayout>
 				</content>
 				<footer>
 					<core:Fragment fragmentName="BVS.fragments.CampoFooter" type="XML"/>
