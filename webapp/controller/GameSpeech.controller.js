@@ -52,14 +52,14 @@ function getFromApiAsync(res, cb, prams) {
 
 }
 
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
-var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
 var mthis;
 var grammar = '#JSGF V1.0; grammar colors; public <command> = <numero> <azione> <qualita>; public <numero> = (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 ); public <azione> = ( bagher | palleggio | schiacciata | battuta | muro ); public <qualita> = ( ottimo | buono | brutto )';
 
 var command = [['suo', 'mio'], ['salvataggio', 'bagher', 'palleggio', 'muro', 'schiacciata', 'battuta'], ['bello', 'brutto', 'ottimo', 'ornetti']]
-var dictionary = []
-dictionary = dictionary.concat(command[1], command[2])
+var dictionary = [];
+dictionary = dictionary.concat(command[1], command[2]);
 
 var topSet, betterThan, user, giocatori, squadra, mioPunteggio = 0, suoPunteggio = 0, mieiSet = 0, suoiset = 0;
 var lastMioPunteggio = 0, lastSuoPunteggio = 0, lastMieiSet = 0, lastSuoiset = 0, undoable = 0;
@@ -80,13 +80,13 @@ var azioneArray = {
 	giocatore: null,
 	azione: null,
 	qualita: null
-}
+};
 var currentPunto = {
 	azione: []
 };
 var currentSet = {
 	punti: []
-}
+};
 var currentPartita = []
 var lastAzioneArray = {
 	giocatore: null,
@@ -302,14 +302,19 @@ function addPuntoSuoFnc(cl){
 }
 
 function mostSuitable(dict, parola) {
+	dict.forEach(function(str){
+		if(str.includes(parola)){
+			return str;
+		}
+	});
     var a = JSON.parse(JSON.stringify(dict));
     a = a.map(function(e){
         var total = e.length, corrected = 0;
         parola.split('').forEach(function(lettera){
             if (e.includes(lettera)) corrected++;
-        })
+        });
         return corrected / total;
-    })
+    });
 
     var index = 0, maxi = -1;
     a.forEach(function(e, i){
@@ -385,11 +390,11 @@ var numeri = [
 	['otto', '8'],
 	['nove', '9'],
 	['zero', '0']
-]
+];
 function sanitize(str){
 	numeri.forEach(function(e){
 		str = str.replace(e[0], e[1]);
-	})
+	});
 	return str;
 }
 
@@ -437,17 +442,19 @@ document.body.onmousedown = function(){
     };
     lastThread = recognition;
     recognition.start();
-    document.body.style.backgroundColor = 'red'
+    document.body.style.backgroundColor = 'red';
 };
 document.body.onmouseup = function() {
 	setTimeout(function(){
     lastThread.stop();
-    document.body.style.backgroundColor = 'black'
+    document.body.style.backgroundColor = 'black';
 }, 250);}
 
 sap.ui.define([
 	"jquery.sap.global",
     'sap/m/TextArea',
+    'sap/m/Text',
+    'sap/m/Image',
     'sap/m/Label',
     'sap/m/Input',
     "sap/m/Button",
@@ -461,7 +468,7 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/BusyIndicator",
     'sap/m/MessageToast'
-], function(jQuery, TextArea, Label, Input, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel, Busy, MessageToast) {
+], function(jQuery, TextArea, Text,Image, Label, Input, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel, Busy, MessageToast) {
 	"use strict";
 
 	return Controller.extend("BVS.controller.GameSpeech", {
@@ -471,7 +478,9 @@ sap.ui.define([
             labell = Label;
             textareaa = TextArea;
             busy = Busy;
-			sap.ui.core.UIComponent.getRouterFor(this).getRoute("GameSpeech").attachMatched(this._onRouteMatched, this);	
+			sap.ui.core.UIComponent.getRouterFor(this).getRoute("GameSpeech").attachMatched(this._onRouteMatched, this);
+
+           
 		},
 		
 		_onRouteMatched: function (oEvent) {
@@ -481,14 +490,36 @@ sap.ui.define([
             if (oQuery) {
                 user = oQuery.username;
                 giocatori = oQuery.giocatori;
-                this.getView().byId("npp").setText(oQuery.squadra + " vs     ")
+                this.getView().byId("npp").setText(oQuery.squadra + " vs     ");
                 squadra = oQuery.squadra;
             }
+            
+            
         },
+        
         
         IniziaPartita: function () {
             mthis = this;
+            //oHbox1.addItem(new Text({text: 'Prima di iniziare a dare comandi vocali, assicurati di indossare degli auricolari con microfono isolato e di consultare la documentazione per la lista completa dei comandi.'
+            							
+            //}));
             if (mthis.getView().byId('avversari').getValue().length > 0) {
+            	var WarningDialog = new Dialog({
+				title: 'Attenzione',
+				type: 'Message',
+				state: 'Warning',
+				content: new Text({text: 'Prima di iniziare a dare comandi vocali, assicurati di indossare degli auricolari con microfono isolato e di consultare la documentazione per la lista completa dei comandi.'}),
+				beginButton: new Button({
+					text: 'Ok',
+					press: function () {
+						WarningDialog.close();
+					}
+				}),
+				afterClose: function() {
+					WarningDialog.destroy();
+				}
+			});
+			
                 var oVbox1 = new sap.m.VBox({width: "100%"});
                 oVbox1.setJustifyContent('Center');
                 oVbox1.setAlignItems('Center');
@@ -525,6 +556,7 @@ sap.ui.define([
                                 var mthisBtn;
                                 
                                 dialog.close();
+                                WarningDialog.open();
                             } else {
                                 MessageToast.show("Invalid set input.");
                             }
