@@ -1,15 +1,30 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="BVS.controller.GameSpeech"
-	xmlns:html="http://www.w3.org/1999/xhtml">
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" controllerName="BVS.controller.GameSpeech">
 	<App>
 		<pages>
 			<Page showNavButton="true" navButtonPress="onNavBack" title="GameSpeech">
 				<content>
-					<core:HTML id="htmlView">
-						
-					</core:HTML>
+
+						<l:VerticalLayout id="containerLayout" width="100%" >
+		<l:BlockLayout id="BlockLayout" background="{/selectedBackground}">
+			<l:BlockLayoutRow accentCells="Accent1" scrollable="true">
+				<l:BlockLayoutCell>
+					<ScrollContainer
+		height="70vh"
+		width="auto"
+		horizontal="true"
+		vertical="true">
+		<core:HTML id="htmlView"/>
+	</ScrollContainer>
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell>
+					<Button type="Reject" class="pushToTalkButton" icon="sap-icon://microphone" text="Push to talk" id="pushToTalkButton"/>
+				</l:BlockLayoutCell>
+			</l:BlockLayoutRow>
+		</l:BlockLayout>
+		</l:VerticalLayout>
 				</content>
 				<footer>
-					<core:Fragment fragmentName="BVS.fragments.CampoFooter" type="XML"></core:Fragment>
+					<core:Fragment fragmentName="BVS.fragments.CampoFooter" type="XML"/>
 				</footer>
 			</Page>
 		</pages>

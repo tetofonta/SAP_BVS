@@ -182,3 +182,18 @@
 .sub{
 	font-size: 26pt;
 }
+
+.pushToTalkButton{
+  height: 50vh;
+  padding: 0;
+}
+.pushToTalkButton > .sapMBtnInner{
+  height: 100%;
+  width: 40vw;
+  display: flex;
+  align-items: center;
+  margin: auto;
+}
+.pushToTalkButton.sapMBtnInner.sapMBtnContent{
+  width:100%
+}
