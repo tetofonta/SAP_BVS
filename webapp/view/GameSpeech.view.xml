@@ -2,9 +2,11 @@
 	xmlns:html="http://www.w3.org/1999/xhtml">
 	<App>
 		<pages>
-			<Page title="GameSpeech">
+			<Page showNavButton="true" navButtonPress="onNavBack" title="GameSpeech">
 				<content>
-					
+					<core:HTML id="htmlView">
+						
+					</core:HTML>
 				</content>
 				<footer>
 					<core:Fragment fragmentName="BVS.fragments.CampoFooter" type="XML"></core:Fragment>
