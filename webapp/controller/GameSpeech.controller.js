@@ -479,7 +479,7 @@ sap.ui.define([
             textareaa = TextArea;
             busy = Busy;
 			sap.ui.core.UIComponent.getRouterFor(this).getRoute("GameSpeech").attachMatched(this._onRouteMatched, this);
-
+ 
            
 		},
 		
@@ -500,17 +500,14 @@ sap.ui.define([
         
         IniziaPartita: function () {
             mthis = this;
-            //oHbox1.addItem(new Text({text: 'Prima di iniziare a dare comandi vocali, assicurati di indossare degli auricolari con microfono isolato e di consultare la documentazione per la lista completa dei comandi.'
-            							
-            //}));
             if (mthis.getView().byId('avversari').getValue().length > 0) {
             	var WarningDialog = new Dialog({
 				title: 'Attenzione',
 				type: 'Message',
 				state: 'Warning',
-				content: new Text({text: 'Prima di iniziare a dare comandi vocali, assicurati di indossare degli auricolari con microfono isolato e di consultare la documentazione per la lista completa dei comandi.'}),
+				content: new Text({text: 'Prima di iniziare a dare comandi vocali, assicurati di indossare degli auricolari con microfono isolato e di consultare la \"documentazione\" per la lista completa dei comandi.'}),
 				beginButton: new Button({
-					text: 'Ok',
+					text: 'OK',
 					press: function () {
 						WarningDialog.close();
 					}
