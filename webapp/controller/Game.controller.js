@@ -179,6 +179,7 @@ var dialogg;
 var buttonn;
 var labell;
 var textareaa;
+var msBox;
 var user = "";
 
 function dwld() {
@@ -224,41 +225,17 @@ function finePartita() {
     }, 1502);
     $("#confetti").css("display", "block");
 
-    if (!mthis.ciaoDialog) {
-        var oVbox2 = new sap.m.VBox({width: "100%"});
-        oVbox2.setJustifyContent('Center');
-        oVbox2.setAlignItems('Center');
-        //oVbox2.addItem(new busy( "fabrizia", {}));
-        oVbox2.addItem(new buttonn({
-            text: "Torna indietro",
-            press: function () {
-                sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home", {
-                    query: {
-                        username: user,
-                        refreshTeam: "true"
-                    }
-                });
-            }
-        }));
-        mthis.ciaoDialog = new dialogg({
-            title: "Partita terminata!",
-            content: [
-                oVbox2,
-                new busy("fabrizia", {})
-            ],
-            beginButton: new buttonn({
-                text: "Chiudi",
-                press: function () {
-                    resetfnc();
-                    mthis.ciaoDialog.close();
-                }.bind(mthis)
-            })
-        });
-        dialogo = mthis.ciaosDialog;
-        //to get access to the global model
-        mthis.getView().addDependent(this.ciaoDialog);
-    }
-    mthis.ciaoDialog.open();
+    mthis.ciaoDialog = msBox.success("\""+McurrentTeam+" - "+mthis.getView().byId('avversari').getValue()+"\", salvata con successo!", {
+			onClose: function () {
+				sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home", {
+					query: {
+						username: user,
+						refreshTeam: "true"
+					}
+				});
+			}
+    	});
+		mthis.getView().addDependent(this.ciaoDialog);
 
     setTimeout(function () {
         var obj = [];
@@ -480,6 +457,7 @@ var isbatting;
 sap.ui.define([
 
     "jquery.sap.global",
+    'sap/m/MessageBox',
     'sap/m/TextArea',
     'sap/m/Label',
     'sap/m/Input',
@@ -494,7 +472,7 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/BusyIndicator",
     'sap/m/MessageToast'
-], function (jQuery, TextArea, Label, Input, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel, Busy, MessageToast) {
+], function (jQuery, MessageBox, TextArea, Label, Input, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel, Busy, MessageToast) {
     "use strict";
 
     return Controller.extend("BVS.controller.Game", {
@@ -505,7 +483,7 @@ sap.ui.define([
          * @memberOf BVS.view.Game
          */
         onInit: function () {
-
+			msBox = MessageBox;
             oModel2 = new JSONModel({
                 changable: []
             }, true);

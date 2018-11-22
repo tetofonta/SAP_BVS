@@ -70,6 +70,7 @@ var scarsoSound = new Audio("audio/scarso.ogg");
 var medioSound = new Audio("audio/medio.ogg");
 var ottimoSound = new Audio("audio/ottimo.ogg");
 var fineSound = new Audio("audio/fine.ogg");
+var msBox;
 var dialogg;
 var buttonn;
 var labell;
@@ -146,41 +147,18 @@ function finePartita() {
     }, 1502);
     $("#confetti").css("display", "block");
 
-    if (!mthis.ciaoDialog) {
-        var oVbox2 = new sap.m.VBox({width: "100%"});
-        oVbox2.setJustifyContent('Center');
-        oVbox2.setAlignItems('Center');
-        //oVbox2.addItem(new busy( "fabrizia", {}));
-        oVbox2.addItem(new buttonn({
-            text: "Torna indietro",
-            press: function () {
-                sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home", {
-                    query: {
-                        username: user,
-                        refreshTeam: "true"
-                    }
-                });
-            }
-        }));
-        mthis.ciaoDialog = new dialogg({
-            title: "Partita terminata!",
-            content: [
-                oVbox2,
-                new busy("fabriziaa", {})
-            ],
-            beginButton: new buttonn({
-                text: "Chiudi",
-                press: function () {
-                    resetfnc();
-                    mthis.ciaoDialog.close();
-                }.bind(mthis)
-            })
-        });
-        dialogo = mthis.ciaosDialog;
-        //to get access to the global model
-        mthis.getView().addDependent(this.ciaoDialog);
-    }
-    mthis.ciaoDialog.open();
+
+    	mthis.ciaoDialog = msBox.success("\""+squadra+" - "+mthis.getView().byId('avversari').getValue()+"\", salvata con successo!", {
+			onClose: function () {
+				sap.ui.core.UIComponent.getRouterFor(mthis).navTo("Home", {
+					query: {
+						username: user,
+						refreshTeam: "true"
+					}
+				});
+			}
+    	});
+		mthis.getView().addDependent(this.ciaoDialog);
 
     setTimeout(function () {
         var obj = [];
@@ -443,6 +421,7 @@ var counter = 0;
 
 sap.ui.define([
 	"jquery.sap.global",
+	'sap/m/MessageBox',
     'sap/m/TextArea',
     'sap/m/Text',
     'sap/m/Image',
@@ -459,12 +438,13 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/BusyIndicator",
     'sap/m/MessageToast'
-], function(jQuery, TextArea, Text,Image, Label, Input, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel, Busy, MessageToast) {
+], function(jQuery, MessageBox, TextArea, Text,Image, Label, Input, Button, Dialog, List, HBox, VBox, StandardListItem, Controller, HTML, JSONModel, Busy, MessageToast) {
 	"use strict";
 
 	return Controller.extend("BVS.controller.GameSpeech", {
 		onInit: function(evt){
 			mthis = this;
+			msBox = MessageBox;
 			buttonn = Button;
             dialogg = Dialog;
             labell = Label;
@@ -677,7 +657,9 @@ sap.ui.define([
                 this.getView().byId("tuoipunti").setText(suoPunteggio);
             }
         },
-
+		onNavBack: function () {
+            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");
+        }
 	});
 
 });
