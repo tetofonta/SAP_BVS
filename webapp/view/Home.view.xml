@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" controllerName="BVS.controller.Home">
-   <Page title="{i18n&gt;homeTitle}">
+   <Page id="page" title="{i18n&gt;homeTitle}">
       <content>
          <HBox justifyContent="End">
             <ComboBox id="sqList" change="loadTeam" items="{         path: '/squadre'           }">
                <core:Item key="{squadra}" text="{squadra}" />
             </ComboBox>
             <Button icon="sap-icon://add" type="Accept" press="addTeam" />
-            <Button icon="sap-icon://edit" press="editTeam" class="sapUiSmallMarginEnd" enabled="false"/>
+            <Button icon="sap-icon://edit" press="editTeam" class="sapUiSmallMarginEnd" enabled="true"/>
          </HBox>
          <l:VerticalLayout id="containerLayout" width="100%">
             <l:BlockLayout id="BlockLayout" background="Default">

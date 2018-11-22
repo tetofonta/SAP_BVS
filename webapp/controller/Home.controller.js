@@ -48,6 +48,7 @@ var getPlayers = "getPlayers";
 var deletePlayer = "deletePlayer";
 var deleteTeam = "deleteTeam";
 var deleteMatch = "deleteMatch";
+var editTeam = "editTeam";
 
 
 var apiHost = "https://cors.io/?http://bettervolleyscouting.altervista.org";
@@ -91,12 +92,16 @@ var user = "";
 
 sap.ui.define([
     "jquery.sap.global",
+    'sap/m/MessageToast',
+    'sap/m/VBox',
+    'sap/m/Label',
+    'sap/m/TextArea',
     'sap/m/Button',
     'sap/m/Dialog',
     'sap/m/Text',
     "sap/ui/core/mvc/Controller",
     'sap/ui/model/json/JSONModel'
-], function (JQuery, Button, Dialog, Text, Controller, JSONModel) {
+], function (JQuery, MessageToast,VBox, Label, TextArea, Button, Dialog, Text, Controller, JSONModel) {
     "use strict";
 
     return Controller.extend("BVS.controller.Home", {
@@ -138,6 +143,62 @@ sap.ui.define([
                     username: user
                 }
             });
+        },
+        editTeam: function () {
+            var dialog = new Dialog({
+				title: 'Conferma',
+				type: 'Message',
+				content: [
+					new VBox({
+						items: [
+							new Label({ text: 'Nome della squadra', labelFor: 'submitNewName'})
+					]
+					}),
+					new TextArea('submitNewName', {
+						liveChange: function(oEvent) {
+							var sText = oEvent.getParameter('value');
+							var parent = oEvent.getSource().getParent();
+
+							parent.getBeginButton().setEnabled(sText.length > 0);
+						},
+						width: '100%',
+						placeholder: 'Nuovo nome'
+					})
+					
+				],
+				beginButton: new Button({
+					text: 'Conferma',
+					enabled: false,
+					press: function () {
+						var sText = sap.ui.getCore().byId('submitNewName').getValue();
+						var ret = getFromApi(editTeam, {
+							SQUADRA: curTeam,
+							NOME: sText
+						});
+						
+						if(ret){
+							MessageToast.show("Nome modificato correttamente");
+						}else{
+							MessageToast.show("Impossibile modificare");
+							return;
+						}
+						
+						dialog.close();
+						setTimeout(function(){window.location.reload()}, 1000);
+					}
+				}),
+				endButton: new Button({
+					text: 'Annulla',
+					press: function () {
+						dialog.close();
+					}
+				}),
+				afterClose: function() {
+					dialog.destroy();
+				}
+			});
+
+			dialog.open();
         },
 
         deleteMatch: function (e) {
