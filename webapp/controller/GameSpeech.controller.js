@@ -471,10 +471,18 @@ sap.ui.define([
             textareaa = TextArea;
             busy = Busy;
 			sap.ui.core.UIComponent.getRouterFor(this).getRoute("GameSpeech").attachMatched(this._onRouteMatched, this);
-			//this.byId("containerLayout").setEnabled(false);
-			MessageToast.show("Per iniziare, scrivere il nome della squadra avversaria e premere il tasto di avvio");
+			
+			
 		},
 		onAfterRendering: function(e){
+			setTimeout(function(){
+				sap.m.MessageToast.show("Per iniziare, scrivere il nome della squadra avversaria e premere il tasto di avvio", {
+				    duration: 1700,
+				    width: "25em",
+				    my: "center",
+				    at: "center"
+				});
+			}, 200);
 			
 			this.byId("pushToTalkButton").attachBrowserEvent("mousedown", function () {
 				var recognition = new SpeechRecognition();
