@@ -7,7 +7,7 @@
                <core:Item key="{squadra}" text="{squadra}" />
             </ComboBox>
             <Button icon="sap-icon://add" type="Accept" press="addTeam" />
-            <Button icon="sap-icon://edit" press="editTeam" class="sapUiSmallMarginEnd" enabled="true"/>
+            <Button id="editSquadraButton" icon="sap-icon://edit" press="editTeam" class="sapUiSmallMarginEnd" enabled="false"/>
          </HBox>
          <l:VerticalLayout id="containerLayout" width="100%">
             <l:BlockLayout id="BlockLayout" background="Default">

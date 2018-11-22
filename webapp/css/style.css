@@ -183,18 +183,44 @@
 	font-size: 26pt;
 }
 
-.pushToTalkButton{
-  height: 70vh;
-  padding: 0;
+/*.pushToTalkButton{*/
+/*  height: 70vh;*/
+/*  padding: 0;*/
+/*}*/
+/*.pushToTalkButton > .sapMBtnInner{*/
+/*  height: 100%;*/
+/*  width: 40vw;*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  margin: auto;*/
+/*}*/
+/*.pushToTalkButton.sapMBtnInner.sapMBtnContent{*/
+/*  width:100%*/
+/*}*/
+
+.pushToTalkButton {
+    height: 90%;
+    width: 100%;
+    margin: 0;
+    padding: 0.250rem 0;
+    vertical-align: top;
+    border: none;
+    background-color: transparent;
 }
-.pushToTalkButton > .sapMBtnInner{
-  height: 100%;
-  width: 40vw;
-  display: flex;
-  align-items: center;
-  margin: auto;
+
+.sapUiBlockLayoutCell {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    overflow: hidden !important;
+    width: 50% !important;
 }
-.pushToTalkButton.sapMBtnInner.sapMBtnContent{
-  width:100%
+
+span.sapMBtnInner.sapMBtnReject {
+    background-image: none;
+    background-color: #f7f7f7;
+    border-color: #bb0000;
+    color: #bb0000;
+    height: 100%;
 }
 

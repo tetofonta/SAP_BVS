@@ -112,7 +112,7 @@ sap.ui.define([
         },
 
         loadTeam: function (oEvent) {
-
+			this.getView().byId("editSquadraButton").setEnabled(true);
             sap.ui.core.BusyIndicator.show(0);
             var obj = {SQUADRA: oEvent.getSource()._lastValue};
             getFromApiAsync(getSavedMatches, function (data) {
@@ -162,7 +162,7 @@ sap.ui.define([
 							parent.getBeginButton().setEnabled(sText.length > 0);
 						},
 						width: '100%',
-						placeholder: 'Nuovo nome'
+						placeholder: curTeam
 					})
 					
 				],

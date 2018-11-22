@@ -404,7 +404,8 @@ var numeri = [
 	['sette', '7'],
 	['otto', '8'],
 	['nove', '9'],
-	['zero', '0']
+	['zero', '0'],
+	['una', '1']
 ];
 function sanitize(str){
 	numeri.forEach(function(e){
@@ -465,6 +466,61 @@ sap.ui.define([
 				});
 			}, 200);
 			
+			this.byId("pushToTalkButton").attachBrowserEvent("touchstart", function () {
+				var recognition = new SpeechRecognition();
+			    var speechRecognitionList = new SpeechGrammarList();
+			    speechRecognitionList.addFromString(grammar, 1.0);
+			    recognition.grammars = speechRecognitionList;
+			    recognition.continuous = true;
+			    recognition.lang = 'it-IT';
+			    recognition.interimResults = false;
+			    recognition.maxAlternatives = 1;
+			
+			    recognition.onresult = function (event) {
+			        var last = sanitize(event.results[event.results.length - 1][0].transcript);
+			        last = last.toLowerCase().split(" ");
+			        if (last[0] === "punto") {
+			            parse([last[0], mostSuitable(command[0], last[1])]);
+			            return;
+			        } else if (last[0] === "annulla"){
+			        	if(!undo()) speak("impossibile annullare")
+			        } else {
+				        last = last.map(function(e, i){
+				            if (i > 0) {
+				                var ms = mostSuitable(dictionary, e);
+				                if (ms === "ornetti") {
+				                    document.body.style.backgroundImage = 'url("./download.png")'
+				                    setTimeout(function(){document.body.style.backgroundImage = ''}, 100);
+				                    return "";
+				                }
+				                return ms;
+				            }
+				            return e
+				        }).join(" ").replace("  ", " ");
+				        console.log(last)
+				        if (!validate(last)) speak("ripeti")
+				        else {
+				        	parse(last.split(" "));
+				        }
+				        recognition.stop();
+			        }
+			    };
+			    lastThread = recognition;
+			    recognition.start();
+			    document.body.style.backgroundColor = 'red';
+			});
+			this.byId("pushToTalkButton").attachBrowserEvent("touchend", function () {
+				setTimeout(function(){
+				    lastThread.stop();
+				    document.body.style.backgroundColor = 'black';
+				}, 250);
+			});
+			this.byId("pushToTalkButton").attachBrowserEvent("mouseup", function () {
+				setTimeout(function(){
+				    lastThread.stop();
+				    document.body.style.backgroundColor = 'black';
+				}, 250);
+			});
 			this.byId("pushToTalkButton").attachBrowserEvent("mousedown", function () {
 				var recognition = new SpeechRecognition();
 			    var speechRecognitionList = new SpeechGrammarList();
@@ -507,6 +563,12 @@ sap.ui.define([
 			    lastThread = recognition;
 			    recognition.start();
 			    document.body.style.backgroundColor = 'red';
+			});
+			this.byId("pushToTalkButton").attachBrowserEvent("touchend", function () {
+				setTimeout(function(){
+				    lastThread.stop();
+				    document.body.style.backgroundColor = 'black';
+				}, 250);
 			});
 			this.byId("pushToTalkButton").attachBrowserEvent("mouseup", function () {
 				setTimeout(function(){
