@@ -5,6 +5,7 @@ function httpGet(theUrl) {
     return xmlHttp.responseText;
 }
 
+
 function httpGetAsync(theUrl, callback) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
