@@ -41,7 +41,7 @@ function httpGetAsync(theUrl, callback) {
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 }
-
+var mthis;
 var getTeams = "getTeams";
 var getSavedMatches = "getSavedMatches";
 var getPlayers = "getPlayers";
@@ -89,19 +89,26 @@ var oModel = {};
 var curTeam = "";
 var curPlayers = [];
 var user = "";
-
+var allenatorePic;
+var logoPic;
+var allenatoreField;
+var campionatoField;
+    
 sap.ui.define([
     "jquery.sap.global",
     'sap/m/MessageToast',
     'sap/m/VBox',
+    'sap/m/HBox',
     'sap/m/Label',
     'sap/m/TextArea',
     'sap/m/Button',
     'sap/m/Dialog',
     'sap/m/Text',
+    'sap/m/Image',
+    "sap/ui/core/HTML",
     "sap/ui/core/mvc/Controller",
     'sap/ui/model/json/JSONModel'
-], function (JQuery, MessageToast,VBox, Label, TextArea, Button, Dialog, Text, Controller, JSONModel) {
+], function (JQuery, MessageToast,VBox,HBox, Label, TextArea, Button, Dialog, Text,Image, HTML, Controller, JSONModel) {
     "use strict";
 
     return Controller.extend("BVS.controller.Home", {
@@ -110,14 +117,22 @@ sap.ui.define([
         	document.body.addEventListener("touchend", function() {}, false);
             sap.ui.core.UIComponent.getRouterFor(this).getRoute("Home").attachMatched(this._onRouteMatched, this);
         },
-
+		
         loadTeam: function (oEvent) {
 			this.getView().byId("editSquadraButton").setEnabled(true);
             sap.ui.core.BusyIndicator.show(0);
             var obj = {SQUADRA: oEvent.getSource()._lastValue};
+            
+            this.getView().byId("allenatoreList").setTitle("Zambonardi Roberto");
+            this.getView().byId("allenatoreList").setIcon("https://i.imgur.com/klXcexk.jpg");
+            this.getView().byId("allenatoreList").setVisible(true);
+            
             getFromApiAsync(getSavedMatches, function (data) {
                 oModel.setProperty("/saved", data);
-
+                //Carica logo team
+				oModel.getProperty("/saved").forEach(function (e) {
+					e.logoTeam = "https://i.imgur.com/4EuXmd5.jpg";
+				});
                 getFromApiAsync(getPlayers, function (dt) {
                     oModel.setProperty("/players", dt);
                     curPlayers = [];
@@ -145,6 +160,7 @@ sap.ui.define([
             });
         },
         editTeam: function () {
+        	
             var dialog = new Dialog({
 				title: 'Conferma',
 				type: 'Message',
@@ -158,22 +174,45 @@ sap.ui.define([
 						liveChange: function(oEvent) {
 							var sText = oEvent.getParameter('value');
 							var parent = oEvent.getSource().getParent();
-
-							parent.getBeginButton().setEnabled(sText.length > 0);
 						},
 						width: '100%',
-						placeholder: curTeam
-					})
-					
+						enabled: false,
+						rows: 1,
+						value: curTeam
+					}),
+					new HBox({
+						items: [
+							new VBox({
+								items: [
+									new Label({text: "Foto allenatore"}),
+									new Image('allenatore', {src: "https://i.imgur.com/oUsxIhd.png", width:"150px", height:"150px"}),
+									new HTML({content: '<input id="inFileAllenatore" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this, \'__image2\', \'#__component0---home--allenatore\', 0);" />'})
+								], alignItems:"Center", justifyContent:"Center"
+							}),
+							new VBox({
+								items: [
+									new Label({text: "Logo squadra"}),
+									new Image('logoSelection', {src: "https://i.imgur.com/oUsxIhd.png", width:"150px", height:"150px"}),
+									new HTML({content: '<input id="inFileLogo" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this, \'__image2\', \'#__component0---home--logoSelection\', 1);" />'})
+								]
+							})
+						]
+					}),
+					new VBox({
+						items: [
+							new Label({ text: 'Nome e cognome allenatore', labelFor: 'submitAllenatore'})
+					]
+					}),
+					new TextArea('submitAllenatore', {width: '100%', rows: 1})
 				],
 				beginButton: new Button({
 					text: 'Conferma',
-					enabled: false,
 					press: function () {
-						var sText = sap.ui.getCore().byId('submitNewName').getValue();
 						var ret = getFromApi(editTeam, {
-							SQUADRA: curTeam,
-							NOME: sText
+							NOME: curTeam,
+							FOTOALLENATORE: sap.ui.getCore().byId('allenatore').getSrc(),
+							LOGO: sap.ui.getCore().byId('logoSelection').getSrc(),
+							NOMEALLENATORE: sap.ui.getCore().byId('submitAllenatore').getValue()
 						});
 						
 						if(ret){
@@ -197,7 +236,7 @@ sap.ui.define([
 					dialog.destroy();
 				}
 			});
-
+			
 			dialog.open();
         },
 
@@ -243,7 +282,8 @@ sap.ui.define([
                             SQUADRA: mthis.getView().byId("sqList").getSelectedKey()
                         });
                         var squadre = getFromApi(getTeams);
-                        squadre.push({squadra: "+++ Aggiungi squadra +++"});
+                        
+                        
                         oModel = new JSONModel({
                             saved: [],
                             players: [],

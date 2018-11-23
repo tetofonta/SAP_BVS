@@ -167,7 +167,7 @@ sap.ui.define([
 
         onAfterRendering: function () {
             var loadFile = this.getView().createId("inFile");
-            $('#' + loadFile).append('<input id="myfile" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />');
+            $('#' + loadFile).append('<input id="myfile" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this, \'#__component0---player--profilePic\');" />');
         },
         onNavBack: function () {
             sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");

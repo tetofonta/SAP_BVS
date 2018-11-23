@@ -14,18 +14,19 @@
                <l:BlockLayoutRow accentCells="Accent1">
                   <l:BlockLayoutCell id="Accent1" width="1" title="Giocatori">
                      <VBox width="100%" class="darkbgmenodark">
-                        <ScrollContainer height="60vh" width="100%" horizontal="false" vertical="true" focusable="true">
-                           <List mode="Delete" delete="deletePlayer" items="{           path: '/players'          }">
-                              <StandardListItem type="Active" press="playerSelect" title="{nome}" description="{numero}" icon="{foto}" />
+                        <StandardListItem id="allenatoreList" description="Allenatore" visible="false"/>
+                        <ScrollContainer height="40vh" width="100%" horizontal="false" vertical="true" focusable="true">
+                           <List mode="Delete" delete="deletePlayer" items="{path: '/players'}">
+                              <StandardListItem type="Active" press="playerSelect" title="{nome}" description="{numero}" icon="{foto}"/>
                            </List>
                         </ScrollContainer>
                      </VBox>
                   </l:BlockLayoutCell>
                   <l:BlockLayoutCell titleAlignment="End" title="Partite disputate">
                      <VBox width="100%" class="darkbg">
-                     	<ScrollContainer height="60vh" width="100%" horizontal="false" vertical="true" focusable="true">
-                        	<List mode="Delete" delete="deleteMatch" items="{           path: '/saved'          }">
-                        		<StandardListItem type="Active" title="{squadra} - {avversario}" description="{data}" info="Id: {id}" press="getReport" />
+                     	<ScrollContainer height="40vh" width="100%" horizontal="false" vertical="true" focusable="true">
+                        	<List mode="Delete" delete="deleteMatch" items="{path: '/saved'}">
+                        		<StandardListItem type="Active" title="{squadra} - {avversario}" description="{data}" info="Id: {id}" icon="{logoTeam}" press="getReport"/>
                     		</List>
                     	</ScrollContainer>
                      </VBox>

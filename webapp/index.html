@@ -47,21 +47,22 @@
 	        /* And now, we send the formdata */
 	        xhr.send(fd);
 	    }
-		function readURL(input) {
+		function readURL(input, picId, picIdContext, tIndex) {
 			if (input.files && input.files[0]) {
 				
 				var reader = new FileReader();
 				reader.onload = function (e) {
-					$('#__component0---player--profilePic')[0].src = "image/loading.gif";
-					//console.log($('#__component0---player--profilePic')[0].src);
-					//console.log(e.target.result);
-					upload(input.files[0], function(link){
-						$('#__component0---player--profilePic')[0].src = link;
-					});
-					//$('#__component0---player--profilePic')[0].src =  imageToDataUri(image, 60, 60);
-					//console.log(image.src);
-					//console.log(imageToDataUri(image, 60, 60))
-					//document.getElementById("canv").parentElement.removeChild(document.getElementById("canv"));
+					if(typeof picIdContext !== 'undefined'){
+    					$(picIdContext).context.images[tIndex].src = "image/loading.gif";
+    					upload(input.files[0], function(link){
+							$(picIdContext).context.images[tIndex].src = link;
+						});
+					}else{
+						$(picId)[0].src = "image/loading.gif";
+						upload(input.files[0], function(link){
+							$(picId)[0].src = link;
+						});
+					}
 				}
 				reader.readAsDataURL(input.files[0]);
 				}

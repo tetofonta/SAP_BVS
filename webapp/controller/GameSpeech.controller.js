@@ -102,17 +102,34 @@ var lastCurrentSet = {
 	punti: []
 }
 var lastCurrentPartita = []
+var lastHTMLData;
+var lastLatestData;
+var htmlData = [];		
+var latestData = "";
+
+function clone(obj) {
+    if (null == obj || "object" != typeof obj)
+        return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr))
+            copy[attr] = obj[attr];
+    }
+    return copy;
+}
 
 function undo(){
 	if(undoable < 1) return false;
-	mieiSet = lastMieiSet;
-	mioPunteggio = lastMioPunteggio;
-    suoiset = lastSuoiset;
-    suoPunteggio = lastSuoPunteggio;
-    azioneArray = lastAzioneArray;
-    currentPartita = lastCurrentPartita;
-    currentPunto = lastCurrentPunto;
-    currentSet = lastCurrentSet;
+	mieiSet = clone(lastMieiSet);
+	mioPunteggio = clone(lastMioPunteggio);
+    suoiset = clone(lastSuoiset);
+    suoPunteggio = clone(lastSuoPunteggio);
+    azioneArray = clone(lastAzioneArray);
+    currentPartita = clone(lastCurrentPartita);
+    currentPunto = clone(lastCurrentPunto);
+    currentSet = clone(lastCurrentSet);
+    htmlData = clone(lastHTMLData);
+    latestData = clone(lastLatestData);
     undoable--;
     return true;
 }
@@ -126,20 +143,13 @@ function save(){
     lastCurrentPartita = currentPartita;
     lastCurrentPunto = currentPunto;
     lastCurrentSet = currentSet;
+    lastHTMLData = htmlData;
+    lastLatestData = latestData;
     undoable++;
     return true;
 }
 
-function clone(obj) {
-    if (null == obj || "object" != typeof obj)
-        return obj;
-    var copy = obj.constructor();
-    for (var attr in obj) {
-        if (obj.hasOwnProperty(attr))
-            copy[attr] = obj[attr];
-    }
-    return copy;
-}
+
 
 function finePartita() {
     //console.log(currentPartita);
@@ -344,8 +354,8 @@ function validate(str) {
     });
     return ok;
 }
-var htmlData = [];		
-var latestData = "";		
+
+		
 			
 function updatehtml(){
 	var html = "";		

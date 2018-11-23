@@ -1,7 +1,7 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" controllerName="BVS.controller.GameSpeech">
 	<App>
 		<pages>
-			<Page showNavButton="true" navButtonPress="onNavBack" title="GameSpeech" class="campodagioco">
+			<Page showNavButton="true" navButtonPress="onNavBack" title="Partita con comandi vocali" class="campodagioco">
 				<content>
 					<l:VerticalLayout id="containerLayout" width="100%" enabled='false'>
 						<l:BlockLayout id="BlockLayout" background="{/selectedBackground}">
