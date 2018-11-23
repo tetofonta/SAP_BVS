@@ -122,19 +122,18 @@ sap.ui.define([
 			this.getView().byId("editSquadraButton").setEnabled(true);
             sap.ui.core.BusyIndicator.show(0);
             var obj = {SQUADRA: oEvent.getSource()._lastValue};
-            
-            this.getView().byId("allenatoreList").setTitle("Zambonardi Roberto");
-            this.getView().byId("allenatoreList").setIcon("https://i.imgur.com/klXcexk.jpg");
-            this.getView().byId("allenatoreList").setVisible(true);
-            
+            var mthis = this;
             getFromApiAsync(getSavedMatches, function (data) {
                 oModel.setProperty("/saved", data);
-                //Carica logo team
-				oModel.getProperty("/saved").forEach(function (e) {
-					e.logoTeam = "https://i.imgur.com/4EuXmd5.jpg";
-				});
                 getFromApiAsync(getPlayers, function (dt) {
-                    oModel.setProperty("/players", dt);
+                    oModel.setProperty("/players", dt.giocatori);
+                    //Carica logo team
+					oModel.getProperty("/saved").forEach(function (e) {
+						e.logoTeam = dt.sqDetails.logo;
+					});
+					mthis.getView().byId("allenatoreList").setTitle(dt.sqDetails.tname);
+		            mthis.getView().byId("allenatoreList").setIcon(dt.sqDetails.pic);
+		            mthis.getView().byId("allenatoreList").setVisible(true);
                     curPlayers = [];
                     oModel.getProperty("/players").forEach(function (e) {
                         e.foto = e.foto.replaceAll(' ', '+');
