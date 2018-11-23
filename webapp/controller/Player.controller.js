@@ -170,7 +170,12 @@ sap.ui.define([
             $('#' + loadFile).append('<input id="myfile" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this, \'#__component0---player--profilePic\');" />');
         },
         onNavBack: function () {
-            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");
+            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
+                query: {
+                    username: user,
+                    refreshTeam: "true"
+                }
+            });
         },
 
         multiBtn: function () {

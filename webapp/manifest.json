@@ -29,10 +29,7 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": [
-			"sap_hcb",
-			"sap_belize"
-		]
+		"supportedThemes": ["sap_hcb", "sap_belize"]
 	},
 	"sap.ui5": {
 		"rootView": {
@@ -76,47 +73,37 @@
 					"target": "notFound"
 				}
 			},
-			"routes": [
-				{
-					"pattern": "",
-					"name": "appLogin",
-					"target": "Login"
-				},
-				{
-					"name": "Home",
-					"pattern": "Home/:?query:",
-					"target": "Home"
-				},
-				{
-					"name": "Game",
-					"pattern": "Game/:?query:",
-					"target": "Game"
-				},
-				{
-					"name": "Player",
-					"pattern": "Player/:?query:",
-					"target": "Player"
-				},
-				{
-					"name": "About",
-					"pattern": "About",
-					"target": "About"
-				},
-				{
-					"name": "showReport",
-					"pattern": "showReport/:?query:",
-					"target": "showReport"
-				},
-				{
-					"name": "GameSpeech",
-					"pattern": "GameSpeech/:?query:",
-					"titleTarget": "",
-					"greedy": false,
-					"target": [
-						"GameSpeech"
-					]
-				}
-			],
+			"routes": [{
+				"pattern": "",
+				"name": "appLogin",
+				"target": "Login"
+			}, {
+				"name": "Home",
+				"pattern": "Home/:?query:",
+				"target": "Home"
+			}, {
+				"name": "Game",
+				"pattern": "Game/:?query:",
+				"target": "Game"
+			}, {
+				"name": "Player",
+				"pattern": "Player/:?query:",
+				"target": "Player"
+			}, {
+				"name": "About",
+				"pattern": "About",
+				"target": "About"
+			}, {
+				"name": "showReport",
+				"pattern": "showReport/:?query:",
+				"target": "showReport"
+			}, {
+				"name": "GameSpeech",
+				"pattern": "GameSpeech/:?query:",
+				"titleTarget": "",
+				"greedy": false,
+				"target": ["GameSpeech"]
+			}],
 			"targets": {
 				"Login": {
 					"viewId": "login",
@@ -161,11 +148,9 @@
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		}
 	},
 	"sap.platform.hcp": {

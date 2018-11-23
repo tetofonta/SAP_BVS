@@ -1,3 +1,4 @@
+var user;
 function httpGet(theUrl) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", theUrl, false); // false for synchronous request
@@ -73,6 +74,7 @@ sap.ui.define([
             oArgs = oEvent.getParameter("arguments");
             oQuery = oArgs["?query"];
             if (oQuery){
+            	user=oQuery.username;
             	var lol = getFromApi("getMatchReport", {ID: oQuery.id});
             	var str = "<tr>";
             	var chrono = [];
@@ -167,7 +169,12 @@ sap.ui.define([
             //console.log(getFromApi(getPlayer, {NUMERO: numeroPlayer, SQUADRA: squadraPlayer}));
         },
         onNavBack: function () {
-            sap.ui.core.UIComponent.getRouterFor(this).navTo("Home");
+        	sap.ui.core.UIComponent.getRouterFor(this).navTo("Home", {
+                query: {
+                    username: user,
+                    refreshTeam: "true"
+                }
+            });
         },
 
 		/**
